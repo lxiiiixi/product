@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig }  from "axios";
+import Cookies from 'js-cookie'
 
 // server client api
 const nodeEnv = process.env.NODE_ENV;
@@ -12,12 +13,14 @@ const instance:AxiosInstance = axios.create({
   });
 
   // 设置拦截器
-// instance.interceptors.request.use((config) => {
-//     config.headers['token'] = window.localStorage.getItem('token')
-//     return config
-//   }, (error) => {
-//     return Promise.reject(error)
-//   })
+instance.interceptors.request.use((config) => {
+    // console.log(document.cookie);
+    // console.log(Cookies.get('token'));
+    config.headers['token'] = window.localStorage.getItem('token')
+    return config
+  }, (error) => {
+    return Promise.reject(error)
+  })
   
 //   instance.interceptors.response.use((response) => {
 //     return response

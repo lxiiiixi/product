@@ -1,14 +1,21 @@
 import { lazy, ReactNode, Suspense } from "react";
 import { type RouteObject } from "react-router-dom";
+import { Spin } from "antd";
 
 import PageLayout from "@/sections/PageLayout";
-const Login = lazy(() => import("@/pages/login"));
-const NotFound = lazy(() => import("@/pages/404"));
-const Home = lazy(() => import("@/pages/Home"));
-const About = lazy(() => import("@/pages/About"));
+const Login = lazy(() => import("@/pages/Login"));
+const Dashboard = lazy(() => import("@/pages/Dashboard"));
+const Monitor = lazy(() => import("@/pages/ObjectMonitor"));
+const Strategy = lazy(() => import("@/pages/Strategies"));
+const Situation = lazy(() => import("@/pages/Situation"));
+const Service = lazy(() => import("@/pages/Service"));
+const RiskAlert = lazy(() => import("@/pages/RiskAlert"));
+
+const NotFound = lazy(() => import("@/pages/Others/404"));
+const Components = lazy(() => import("@/pages/Others/Components"));
 
 const lazyLoad = (conponent: ReactNode): ReactNode => {
-    return <Suspense fallback={<span>A loading component here</span>}>{conponent}</Suspense>;
+    return <Suspense fallback={<Spin />}>{conponent}</Suspense>;
 };
 
 const routes: RouteObject[] = [
@@ -17,22 +24,38 @@ const routes: RouteObject[] = [
         element: <PageLayout />,
         children: [
             {
-                path: "/",
-                element: lazyLoad(<Home />),
+                path: "/dashboard",
+                element: lazyLoad(<Dashboard />),
             },
             {
-                path: "/home",
-                element: lazyLoad(<Home />),
+                path: "/monitor",
+                element: lazyLoad(<Monitor />),
             },
             {
-                path: "/about",
-                element: lazyLoad(<About />),
+                path: "/risk",
+                element: lazyLoad(<RiskAlert />),
+            },
+            {
+                path: "/strategy",
+                element: lazyLoad(<Strategy />),
+            },
+            {
+                path: "/situation",
+                element: lazyLoad(<Situation />),
+            },
+            {
+                path: "/service",
+                element: lazyLoad(<Service />),
             },
         ],
     },
     {
         path: "/login",
         element: lazyLoad(<Login />),
+    },
+    {
+        path: "/components",
+        element: lazyLoad(<Components />),
     },
     {
         path: "*",

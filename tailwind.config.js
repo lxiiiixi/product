@@ -12,5 +12,8 @@ export default {
     // require('prettier-plugin-tailwindcss'), // https://github.com/tailwindlabs/prettier-plugin-tailwindcss
     require('tailwindcss-debug-screens'), // https://github.com/jorenvanhee/tailwindcss-debug-screens
   ],
+  corePlugins: {
+    preflight: false
+  }
 }
 

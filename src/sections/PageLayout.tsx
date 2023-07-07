@@ -1,23 +1,27 @@
 import { Outlet } from "react-router-dom";
-import { useNavigate, Navigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Layout } from "antd";
+
+import LayoutSider from "./Layout/LayoutSider";
+import LayoutFooter from "./Layout/LayoutFooter";
+import LayoutHeader from "./Layout/LayoutHeader";
 
 function PageLayout() {
-    const navigate = useNavigate();
-
     return (
-        <div className="h-full w-full">
-            <div className="text-center my-10 text-2xl">
-                <Link to="/">home</Link>
-                <span className="mx-4 cursor-pointer" onClick={() => navigate("/about")}>
+        <Layout>
+            {/* <Link to="/">home</Link>
+                <Button className="mx-4 cursor-pointer" onClick={() => navigate("/about")}>
                     about
-                </span>
-                <Link to="/login">login</Link>
-            </div>
-            <div className="flex-center">
-                <Outlet />
-            </div>
-        </div>
+                </Button>
+                <Link to="/login">login</Link> */}
+            <LayoutSider />
+            <Layout className="min-h-screen bg-[#F2F8FF]">
+                <LayoutHeader />
+                <Layout.Content className="p-5">
+                    <Outlet />
+                </Layout.Content>
+                <LayoutFooter />
+            </Layout>
+        </Layout>
     );
 }
 

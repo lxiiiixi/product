@@ -1,22 +1,33 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import API from "@/api";
-import Cookies from 'js-cookie';
 import userInfoStore from "@/store/userInfoStore";
+import { useModal } from "@/hooks/useModal";
+import ContactUsFormModal from "@/sections/Modals/ContactUsModal";
 
 function Dashboard() {
-    const {userName,userAddress} = userInfoStore();
+    const [open1, openModal1, closeModal1] = useModal();
+    // const {userName,userAddress} = userInfoStore();
 
-    console.log(userName,userAddress);
+    // console.log(open1, openModal1, closeModal1);
+    
+
     
     // useEffect(() => {
     // },[])
 
     const login = () =>{
-  API.UserApi.login({email: "example@gamilc.com", password: "password"}).then(res => {
-            console.log(res);
-            Cookies.set('token', res.data.access_token, { expires: 1 });
+        API.UserApi.login({email: "example@gamilc.com", password: "password"}).then(res => {
+            console.log(res.data.access_token);
         })
     }
+
+
+    const logout = () =>{
+        API.UserApi.logout().then(res => {
+           console.log("logout",res);
+      })
+    }
+
 
     const getList = () =>{
         API.ObjApi.getObjList().then(res => {
@@ -26,10 +37,19 @@ function Dashboard() {
         });
     }
 
+
     return <div>
         <button onClick={login}>login</button>
+        <button onClick={logout}>logout</button>
+
         <button onClick={getList}>get list</button>
-        
+  
+        <div>
+        {/* <button onClick={openModal1}>closeModal</button> */}
+        </div>
+
+
+{/* <ContactUsFormModal open={open} closeModal={closeModal1} /> */}
     </div>;
 }
 

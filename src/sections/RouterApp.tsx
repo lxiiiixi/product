@@ -9,7 +9,7 @@ function RouterApp() {
 
     const handleRedirect = (item: RouteObject) => {
         if (pathname === "/") {
-            return <Navigate to="/" />;
+            return <Navigate to="/dashboard" />;
         }
         if (pathname !== "/login" && !token) {
             return <Navigate to="/login" replace={true} />;

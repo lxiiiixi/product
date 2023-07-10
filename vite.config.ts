@@ -2,8 +2,12 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import path from "path";
 
+
+
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
+    // console.log(mode);
+    
     return {
         base: "./",
         resolve: {
@@ -32,11 +36,11 @@ export default defineConfig(({ command, mode }) => {
             port: 3000,
             open: false,
             proxy: {
-                "/api": {
-                    target: "",
+                "/fp-api": {
+                    target: mode === "development" ?  "https://shield.fairyproof.com/" :"",
                     changeOrigin: true,
                     secure: false,
-                    rewrite: path => path.replace(/^\/cloud/, "/api"),
+                    rewrite: path => path.replace(/^\/fp-api/, ''),
                 },
             },
             cors: true,

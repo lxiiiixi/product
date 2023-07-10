@@ -1,39 +1,44 @@
 import axios, { AxiosInstance, AxiosRequestConfig }  from "axios";
 import Cookies from 'js-cookie'
 
-// server client api
-const nodeEnv = process.env.NODE_ENV;
-const isDev = nodeEnv === "development";
-const baseURL = isDev ? "https://shield.fairyproof.com" : "https://shield.fairyproof.com";
+// // server client api
+// const nodeEnv = process.env.NODE_ENV;
+// const isDev = nodeEnv === "development";
+// const baseURL = isDev ? "https://shield.fairyproof.com" : "https://shield.fairyproof.com";
 
 const instance:AxiosInstance = axios.create({
-    baseURL,
-    timeout: 2000,
-    withCredentials: true
+    // baseURL,
+    timeout: 5000,
+    withCredentials: true,
   });
 
-  // 设置拦截器
-instance.interceptors.request.use((config) => {
-    // console.log(document.cookie);
-    // console.log(Cookies.get('token'));
-    config.headers['token'] = window.localStorage.getItem('token')
-    return config
-  }, (error) => {
-    return Promise.reject(error)
-  })
-  
-//   instance.interceptors.response.use((response) => {
-//     return response
+// // 设置拦截器
+// instance.interceptors.request.use((config) => {
+//     // console.log(Cookies.get('token'));
+//     // config.headers['Cookie'] = "token="+ Cookies.get('token')
+//     return config
 //   }, (error) => {
 //     return Promise.reject(error)
 //   })
   
+// 响应拦截
+  instance.interceptors.response.use((response) => {
+    return response
+  }, (error) => {
+    console.log(error);
+    if(error.response.request.status === 401){
+      window.location.href = '/product';
+    }
+    return Promise.reject(error)
+  })
+  
 
 export default function Request (config: AxiosRequestConfig) {
     const { url = '', method = 'GET', data = {}, headers = {} } = config
+    const requestUrl = "/fp-api" + url; // match proxy config 
     switch (method.toUpperCase()) {
       case 'GET':
-        return instance.get(url, { params: data })
+        return instance.get(requestUrl, { params: data})
       case 'POST':
         // 表单提交  application/x-www-form-url-encoded
         if (headers['content-type'] === 'application/x-www-form-url-encoded') {
@@ -42,7 +47,7 @@ export default function Request (config: AxiosRequestConfig) {
           for(let key in data) {
             p.append(key, data[key])
           }
-          return instance.post(url, p, {headers})
+          return instance.post(requestUrl, p, {headers})
         }
         // 文件提交  multipart/form-data
         if (headers['content-type'] === 'multipart/form-data') {
@@ -50,16 +55,16 @@ export default function Request (config: AxiosRequestConfig) {
           for(let key in data) {
             p.append(key, data[key])
           }
-          return instance.post(url, p, {headers})
+          return instance.post(requestUrl, p, {headers})
         }
         
-        return instance.post(url, data)  // 默认 application/json
+        return instance.post(requestUrl, data)  // 默认 application/json
       case 'PUT':
-        return instance.put(url, data)
+        return instance.put(requestUrl, data)
       case 'DELETE': 
-        return instance.delete(url, {data})
+        return instance.delete(requestUrl, {data})
       case 'PATCH':  
-        return instance.patch(url, data)
+        return instance.patch(requestUrl, data)
       default:
         return instance(config)
     }

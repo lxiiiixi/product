@@ -1,9 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { Layout } from "antd";
 
-import LayoutSider from "./Layout/LayoutSider";
-import LayoutFooter from "./Layout/LayoutFooter";
-import LayoutHeader from "./Layout/LayoutHeader";
+import LayoutSider from "./LayoutSections/LayoutSider";
+import LayoutFooter from "./LayoutSections/LayoutFooter";
+import LayoutHeader from "./LayoutSections/LayoutHeader";
 
 function PageLayout() {
     return (

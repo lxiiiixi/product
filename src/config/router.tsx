@@ -4,6 +4,7 @@ import { Spin } from "antd";
 
 import PageLayout from "@/sections/PageLayout";
 const Login = lazy(() => import("@/pages/Login"));
+const Product = lazy(() => import("@/pages/Product"));
 const Dashboard = lazy(() => import("@/pages/Dashboard"));
 const Monitor = lazy(() => import("@/pages/ObjectMonitor"));
 const Strategy = lazy(() => import("@/pages/Strategies"));
@@ -48,6 +49,10 @@ const routes: RouteObject[] = [
                 element: lazyLoad(<Service />),
             },
         ],
+    },
+    {
+        path: "/product",
+        element: lazyLoad(<Product />),
     },
     {
         path: "/login",

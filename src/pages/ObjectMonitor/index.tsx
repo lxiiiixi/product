@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 function ObjectMonitor() {
-    return <div>ObjectMonitor</div>;
+  return <div>ObjectMonitor</div>;
 }
 
 export default ObjectMonitor;

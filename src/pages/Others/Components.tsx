@@ -3,6 +3,7 @@ import React from 'react';
 import FPCard from '@/components/FPCard';
 import FPAddCard from '@/components/FPAddCard';
 import FPPageHeader from '@/components/FPPageHeader';
+import FPInput from '@/components/FPInput';
 
 import { PlusOutlined } from '@ant-design/icons';
 
@@ -55,9 +56,13 @@ function Components() {
         FPAddCard
         <FPAddCard addFunction={() => {}} />
       </div>
-      <div className="my-4 w-[260px] h-[260px]">
+      <div className="my-4">
         FPPageHeader
         <FPPageHeader icon={<PlusOutlined />} text="test" />
+      </div>
+      <div className="my-4">
+        FPInput
+        <FPInput />
       </div>
     </div>
   );

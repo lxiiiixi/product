@@ -1,17 +1,24 @@
 import { useState } from 'react';
 import { Card, Button, Row, Col } from 'antd';
-import ContactUsFormModal from '@/sections/Modals/ContactUsModal';
 import FPCard from '@/components/FPCard';
+import { useModal } from '@/hooks/useModal';
+import ContactUsFormModal from '@/sections/Modals/ContactUsModal';
 
 import { Service_1, Service_2, Service_3 } from '@/assets';
 
 function Service() {
+  const { open, openModal, closeModal } = useModal();
+
   return (
     <div>
+      <ContactUsFormModal open={open} closeModal={closeModal} />
       <FPCard
         title="More professional solutions"
-        // extra={<Button className="mr-1"
-        //     onClick={showContactUsModal}>Contact Us</Button>}
+        extra={
+          <Button className="mr-1" onClick={openModal}>
+            Contact Us
+          </Button>
+        }
         className="m-2 sm:m-5"
       >
         <p className="text-sm text-main-textGray leading-6 w-10/12">

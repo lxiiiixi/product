@@ -4,12 +4,13 @@ import FPCard from '@/components/FPCard';
 import FPAddCard from '@/components/FPAddCard';
 import FPPageHeader from '@/components/FPPageHeader';
 import FPInput from '@/components/FPInput';
+import FPRadio from '@/components/FPRadio';
 
 import { PlusOutlined } from '@ant-design/icons';
 
 function Components() {
   return (
-    <div className="p-6">
+    <div className="p-6 pb-[300px]">
       <div className="my-4">
         theme color
         <div className="flex">
@@ -63,6 +64,31 @@ function Components() {
       <div className="my-4">
         FPInput
         <FPInput />
+      </div>
+      <div className="my-4">
+        FPRadio
+        <FPRadio
+          handleChange={value => {
+            console.log(value);
+          }}
+          options={[
+            {
+              key: '1',
+              label: '24h',
+              value: '1d'
+            },
+            {
+              key: '2',
+              label: '3d',
+              value: '3d'
+            },
+            {
+              key: '3',
+              label: '7d',
+              value: '7d'
+            }
+          ]}
+        />
       </div>
     </div>
   );

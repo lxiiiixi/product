@@ -15,6 +15,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ConfigProvider
       theme={{
+        token: {
+          // colorBgLayout: '#F2F8FF',
+          fontSize: 12
+        },
         components: {
           Menu: {
             itemBg: 'transparent'

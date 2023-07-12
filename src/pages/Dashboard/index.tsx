@@ -1,9 +1,9 @@
-// import { useEffect } from "react";
+import { useEffect } from 'react';
 import API from '@/api';
 // import userInfoStore from "@/store/userInfoStore";
 // import { useModal } from "@/hooks/useModal";
 // import ContactUsFormModal from "@/sections/Modals/ContactUsModal";
-import { message } from 'antd';
+import { Card, message } from 'antd';
 
 function Dashboard() {
   // const [open1, openModal1, closeModal1] = useModal();
@@ -51,6 +51,19 @@ function Dashboard() {
       <div>{/* <button onClick={openModal1}>closeModal</button> */}</div>
 
       {/* <ContactUsFormModal open={open} closeModal={closeModal1} /> */}
+
+      <Card className="threaten-assets orange-linear-gradient mb-3 md:mb-0 h-full">
+        <div className="flex justify-center items-center">
+          <div className="title-icon-block rounded-md mr-1"></div>
+          <p className="text-center text-xs sm:text-base">
+            Threatened <br />
+            Assets Value:
+          </p>
+        </div>
+        <p className="text-center my-1">
+          <span className="text-2xl lg:text-6xl font-semibold">100000</span>
+        </p>
+      </Card>
     </div>
   );
 }

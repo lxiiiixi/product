@@ -1,28 +1,28 @@
-import { create } from 'zustand'
+import { create } from 'zustand';
 
 interface UserInfo {
-    userName: string;
-    setUserName: (name: string) => void;
-    userAddress: string;
-    setUserAddress: (address: string) => void;
+  userName: string;
+  setUserName: (name: string) => void;
+  userEmail: string;
+  setUserEmail: (email: string) => void;
 }
 
-const userInfoStore = create<UserInfo>((set) => ({
-    userName:"none",
-    setUserName: (name) => {
-        set((state) => ({
-            ...state,
-            userName:name
-          }));
-    },
+const userInfoStore = create<UserInfo>(set => ({
+  userName: 'none',
+  setUserName: name => {
+    set(state => ({
+      ...state,
+      userName: name
+    }));
+  },
 
-    userAddress: "none",
-    setUserAddress: (address) => {
-        set((state) => ({
-            ...state,
-            userAddress:address
-          }));
-    }
-}))
+  userEmail: 'none',
+  setUserEmail: email => {
+    set(state => ({
+      ...state,
+      userEmail: email
+    }));
+  }
+}));
 
-export default userInfoStore
+export default userInfoStore;

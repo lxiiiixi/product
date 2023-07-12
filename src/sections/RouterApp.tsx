@@ -6,6 +6,7 @@ import {
   type RouteObject
 } from 'react-router-dom';
 import routes from '@/config/router';
+import Cookies from 'js-cookie';
 
 function RouterApp() {
   const location = useLocation();
@@ -14,15 +15,16 @@ function RouterApp() {
   const token = true; // get token
 
   const handleRedirect = (item: RouteObject) => {
-    // if (pathname === '/') {
+    if (pathname === '/') {
+      return <Navigate to="/dashboard" />;
+    }
+    // if (pathname === '/login' && !!token) {
     //   return <Navigate to="/dashboard" />;
     // }
+    if (pathname !== '/login' && !token) {
+      return <Navigate to="/login" replace={true} />;
+    }
     return item.element;
-    // if (pathname !== "/login" && !token) {
-    //     return <Navigate to="/login" replace={true} />;
-    // } else {
-    //     return item.element;
-    // }
   };
 
   const RouteNav = (param: RouteObject[]) => {

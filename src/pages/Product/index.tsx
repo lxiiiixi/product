@@ -23,7 +23,7 @@ function Product() {
             </p>
           </div>
           <div className="flex items-left justify-left">
-            <a href="/signup">
+            <a href="./signup">
               <Button
                 type="primary"
                 size="large"
@@ -33,7 +33,7 @@ function Product() {
                 Sign up
               </Button>
             </a>
-            <a href="/login">
+            <a href="/#/login">
               <Button type="primary" size="large" shape="round" className="">
                 Sign in
               </Button>

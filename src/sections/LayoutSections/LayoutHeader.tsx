@@ -1,47 +1,75 @@
-import React from "react";
-import { Layout, Dropdown, Button, Space } from "antd";
-import { MoreOutlined } from "@ant-design/icons";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Layout, Dropdown, Button, Space } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
+import userInfoStore from '@/store/userInfoStore';
+import API from '@/api';
 
 function LayoutHeader() {
-    const userInfo = { nick_name: "user" };
+  const navigate = useNavigate();
 
-    const handleLoginOut = () => {};
-    const items = [
-        {
-            key: "1",
-            label: <div onClick={handleLoginOut}> Login out </div>,
-        },
-    ];
+  const { userName } = userInfoStore();
+  const { setUserName, setUserEmail } = userInfoStore();
 
-    return (
-        <Layout.Header
-            className="flex justify-end h-11 bg-[#F2F8FF]"
-            style={{
-                lineHeight: "inherit",
-                paddingInline: "16px",
-            }}
-        >
-            <div className="inline-flex justify-items-center items-center">
-                <Space className="text-gray-400 px-1 flex-center">
-                    <span>{userInfo ? userInfo.nick_name : "UserName"}</span>
-                    {/* <span className="mr-1">Ethereum</span>
-                    <DownOutlined style={{ fontSize: '10px' }} /> */}
-                    <span>{/* <ConnectButton /> */}</span>
-                    <Button type="text" shape="circle" className="flex-center">
-                        <Dropdown
-                            menu={{
-                                items,
-                                selectable: true,
-                                defaultSelectedKeys: ["1"],
-                            }}
-                        >
-                            <MoreOutlined style={{ color: "#666", fontSize: "18px" }} />
-                        </Dropdown>
-                    </Button>
-                </Space>
-            </div>
-        </Layout.Header>
-    );
+  useEffect(() => {
+    API.UserApi.getUserInfo()
+      .then(res => {
+        console.log(res);
+        const { nick_name, email } = res.data;
+        setUserName(nick_name);
+        setUserEmail(email);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }, []);
+
+  const handleLoginOut = () => {
+    API.UserApi.logout()
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.log('error', err);
+      });
+    navigate('/product');
+  };
+
+  const items = [
+    {
+      key: '1',
+      label: <div onClick={handleLoginOut}> Logout </div>
+    }
+  ];
+
+  return (
+    <Layout.Header
+      className="flex justify-end h-16 bg-[#F2F8FF]"
+      style={{
+        lineHeight: 'inherit',
+        paddingInline: '16px'
+      }}
+    >
+      <div className="inline-flex justify-items-center items-center">
+        <Space className="text-gray-400 px-1 flex-center">
+          <span>{userName ? userName : 'UserName'}</span>
+          <Button type="text" shape="circle" className="flex-center">
+            <Dropdown
+              menu={{
+                items,
+                selectable: true,
+                defaultSelectedKeys: ['1']
+              }}
+            >
+              <MoreOutlined style={{ color: '#666', fontSize: '18px' }} />
+            </Dropdown>
+          </Button>
+          <ConnectButton />
+        </Space>
+      </div>
+    </Layout.Header>
+  );
 }
 
 export default LayoutHeader;

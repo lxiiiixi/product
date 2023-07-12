@@ -27,8 +27,11 @@ instance.interceptors.response.use(
   },
   error => {
     console.log(error);
-    if (error.response.request.status === 401) {
-      window.location.href = '/product';
+    if (
+      error.response.request.status === 401 &&
+      !window.location.href.includes('login')
+    ) {
+      window.location.href = '/#/product';
     }
     return Promise.reject(error);
   }

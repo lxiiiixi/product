@@ -1,8 +1,8 @@
 import Request from '../request';
 
-export function getObjList() {
+export function getStyList() {
   return Request({
     method: 'GET',
-    url: '/api/obj/list/all'
+    url: '/api/sty/list/all'
   });
 }

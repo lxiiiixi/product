@@ -1,8 +1,8 @@
 import Request from '../request';
 
-export function getObjList() {
+export function getRiskList() {
   return Request({
     method: 'GET',
-    url: '/api/obj/list/all'
+    url: '/api/risk/list/all'
   });
 }

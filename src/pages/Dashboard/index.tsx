@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Card, message, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 
 import API from '@/api';
 
@@ -11,20 +11,25 @@ import ObjectTable from '@/sections/Dashboard/ObjectTable';
 
 // import userInfoStore from "@/store/userInfoStore";
 
-import { ObjectInfo, StrategyInfo } from '@/config/commonInterface';
+import {
+    ObjectInfo,
+    RiskInfo,
+    RiskStatus,
+    StrategyInfo
+} from '@/config/commonInterface';
 
 function Dashboard() {
-    const [riskListData, setRiskListData] = useState<StrategyInfo[]>([]);
-    const [currentObjectList, setCurrentObjectList] = useState<ObjectInfo[]>(
-        []
-    );
+    const [riskListData, setRiskListData] = useState<RiskInfo[]>([]);
+    const [objectList, setObjectList] = useState<ObjectInfo[]>([]);
+    const [strategyList, setStrategyList] = useState<StrategyInfo[]>([]);
 
-    console.log(riskListData);
+    // console.log(riskListData);
+    // console.log('objectList', objectList);
 
     const getObjectList = () => {
         API.ObjApi.getObjList()
             .then(res => {
-                setRiskListData(res.data);
+                setObjectList(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -34,7 +39,7 @@ function Dashboard() {
     const getRiskList = () => {
         API.RiskApi.getRiskList()
             .then(res => {
-                setCurrentObjectList(res.data);
+                setRiskListData(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -44,31 +49,81 @@ function Dashboard() {
     useEffect(() => {
         getObjectList();
         getRiskList();
+        getStrategyList();
     }, []);
 
-    // const getStrategyList = () => {
-    //   API.StyApi.getStyList()
-    //     .then(res => {
-    //       console.log(res);
-    //     })
-    //     .catch(err => {
-    //       console.log(err);
-    //     });
-    // };
+    const getStrategyList = () => {
+        API.StyApi.getStyList()
+            .then(res => {
+                setStrategyList(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
+
+    const getRiskAlertData = (data: RiskInfo[]) => {
+        let dayRiskList: RiskInfo[] = [];
+        let threeDayRiskList: RiskInfo[] = [];
+        let sevenDayRiskList: RiskInfo[] = [];
+        let riskLevel: { [key: string]: number } = {};
+        let assetsValue = 0;
+        data.forEach(item => {
+            if (item.created_at > Date.now() - 86400000) {
+                dayRiskList.push(item);
+            } else if (item.created_at > Date.now() - 259200000) {
+                threeDayRiskList.push(item);
+            } else if (item.created_at > Date.now() - 604800000) {
+                sevenDayRiskList.push(item);
+            }
+            if (item.status === RiskStatus.UnProcessed) {
+                assetsValue += item.assets;
+            }
+        });
+        console.log(dayRiskList, threeDayRiskList, sevenDayRiskList);
+
+        dayRiskList.forEach(item => {
+            if (riskLevel[item.level]) {
+                riskLevel[item.level] += 1;
+            } else {
+                riskLevel[item.level] = 1;
+            }
+        });
+        threeDayRiskList.forEach(item => {
+            if (riskLevel[item.level]) {
+                riskLevel[item.level] += 1;
+            } else {
+                riskLevel[item.level] = 1;
+            }
+        });
+        sevenDayRiskList.forEach(item => {
+            if (riskLevel[item.level]) {
+                riskLevel[item.level] += 1;
+            } else {
+                riskLevel[item.level] = 1;
+            }
+        });
+        return { riskLevel, assetsValue };
+    };
+
+    const { riskLevel, assetsValue } = getRiskAlertData(riskListData);
 
     return (
         <div>
             <More />
             <Row gutter={{ xs: 8, sm: 16, md: 24, lg: 32 }} align="stretch">
                 <Col xs={24} sm={24} md={12} lg={10} className="my-3">
-                    <RiskAlert />
+                    <RiskAlert riskLevel={riskLevel} />
                 </Col>
                 <Col xs={24} sm={24} md={12} lg={14} className="my-3">
-                    <ValueDisplay />
+                    <ValueDisplay
+                        assetsValue={assetsValue}
+                        strategyCount={strategyList.length}
+                    />
                 </Col>
             </Row>
             <RiskTable riskListData={riskListData} />
-            <ObjectTable currentObjectList={currentObjectList} />
+            <ObjectTable objectList={objectList} />
         </div>
     );
 }

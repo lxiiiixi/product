@@ -8,10 +8,12 @@ import ContactUsFormModal from '@/sections/Modals/ContactUsModal';
 import type { ColumnsType } from 'antd/es/table';
 import { RiskInfo } from '@/config/commonInterface';
 
+import { getChainById } from '@/utils/chains';
+
 const tableColumns: ColumnsType<RiskInfo> = [
     {
         title: 'Discovery time',
-        dataIndex: 'created_at',
+        dataIndex: 'created_at', // Waiting: 时间转换为 xxx days ago
         key: 'created_at',
         width: '10%'
     },
@@ -19,7 +21,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
         title: 'Risk Labels',
         dataIndex: 'name',
         key: 'name',
-        width: '18%',
+        width: '12%',
         render: (data, record) => (
             // console.log(data),
             <>
@@ -27,13 +29,13 @@ const tableColumns: ColumnsType<RiskInfo> = [
                 <p className="my-1">
                     <Tag color="volcano">{record.level}</Tag>
                 </p>
-                {/* {record.labels.map(item => {
-          return (
-            <p className="my-1" key={item}>
-              <Tag color="warning">{item}</Tag>
-            </p>
-          );
-        })} */}
+                {record.labels.map(item => {
+                    return (
+                        <p className="my-1" key={item}>
+                            <Tag color="warning">{item}</Tag>
+                        </p>
+                    );
+                })}
             </>
         )
     },
@@ -41,7 +43,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
         title: 'Level',
         dataIndex: 'level',
         key: 'level',
-        width: '10%',
+        width: '6%',
         render: item => {
             if (item === 'High') {
                 return (
@@ -63,10 +65,12 @@ const tableColumns: ColumnsType<RiskInfo> = [
         title: 'Monitored Object',
         dataIndex: 'object_address',
         key: 'object_address',
-        width: '18%',
+        width: '28%',
         render: (text, record) => (
-            <div className=" w-9 whitespace-normal">
-                {/* {`${record.name}(${getChainById(record.chain_id)}:${text})`} */}
+            <div className="whitespace-normal">
+                {`${record.name} (${getChainById(
+                    record.chain_id as string
+                )}:${text})`}
             </div>
         )
     },
@@ -74,7 +78,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
         title: 'Value of Assets involved',
         dataIndex: 'assets',
         key: 'assets',
-        width: '10%'
+        width: '8%'
     },
     {
         title: 'Status',
@@ -103,6 +107,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
         key: 'more',
         render: (text, record) => {
             return (
+                // Waiting: 风险详情页面的跳转
                 <a href={`/risk/${record._id.$oid}`}>
                     <Button className="blue-title-bg" type="primary">
                         View detail
@@ -113,7 +118,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
     }
 ];
 
-function RiskTable({ riskListData }: { riskListData: RiskInfo }) {
+function RiskTable({ riskListData }: { riskListData: RiskInfo[] }) {
     const { open, openModal, closeModal } = useModal();
     return (
         <FPCard

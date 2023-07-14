@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Row, Col } from 'antd';
 
 import API from '@/api';
@@ -46,12 +46,6 @@ function Dashboard() {
             });
     };
 
-    useEffect(() => {
-        getObjectList();
-        getRiskList();
-        getStrategyList();
-    }, []);
-
     const getStrategyList = () => {
         API.StyApi.getStyList()
             .then(res => {
@@ -61,6 +55,12 @@ function Dashboard() {
                 console.log(err);
             });
     };
+
+    useEffect(() => {
+        getObjectList();
+        getRiskList();
+        getStrategyList();
+    }, []);
 
     const getRiskAlertData = (data: RiskInfo[]) => {
         let dayRiskList: RiskInfo[] = [];
@@ -106,7 +106,10 @@ function Dashboard() {
         return { riskLevel, assetsValue };
     };
 
-    const { riskLevel, assetsValue } = getRiskAlertData(riskListData);
+    const { riskLevel, assetsValue } = useMemo(
+        () => getRiskAlertData(riskListData),
+        [riskListData]
+    );
 
     return (
         <div>

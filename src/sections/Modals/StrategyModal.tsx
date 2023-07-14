@@ -82,6 +82,7 @@ function StrategyModal({
     };
 
     const getFuntionByAbi = () => {
+        // waiting: 这里暂时有个warning，因为方法会在组件首次渲染时执行一次，但这时候 form 还没有和组件绑定，这里等之后看是否需要编辑之后看需不需要加上默认值来进一步确认和判断
         const abi = form.getFieldValue('custom_abi');
         if (abi)
             return getFuntionsByAbi(abi).filter(

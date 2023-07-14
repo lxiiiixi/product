@@ -75,7 +75,7 @@ function Strategies() {
                 <PlusOutlined className="text-white text-xl font-extrabold" />
             </div>
             <Row gutter={[24, 24]} className="items-stretch">
-                {strategyList.length &&
+                {strategyList.length > 0 &&
                     strategyList.map(item => {
                         return (
                             <Col

@@ -1,6 +1,7 @@
 import React from 'react';
-import FPCard from '@/components/FPCard';
+import { Link } from 'react-router-dom';
 
+import FPCard from '@/components/FPCard';
 import { Table, Button, Tag } from 'antd';
 import { AlertFilled } from '@ant-design/icons';
 import { useModal } from '@/hooks/useModal';
@@ -108,11 +109,11 @@ const tableColumns: ColumnsType<RiskInfo> = [
         render: (text, record) => {
             return (
                 // Waiting: 风险详情页面的跳转
-                <a href={`/risk/${record._id.$oid}`}>
+                <Link to={`../risk/${record._id.$oid}`}>
                     <Button className="blue-title-bg" type="primary">
-                        View detail
+                        View Detail
                     </Button>
-                </a>
+                </Link>
             );
         }
     }

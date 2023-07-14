@@ -1,17 +1,17 @@
-import { ReactNode } from 'react';
 import LayoutFooter from './LayoutSections/LayoutFooter';
 import HeaderBar from './LandpageSetions/HeaderBar';
+import { Outlet } from 'react-router-dom';
 
-function LandPageLayout({ children }: { children: ReactNode }) {
-  return (
-    <div className=" min-h-screen min-w-screen">
-      <HeaderBar />
-      <div className="px-9 pt-[100px] py-10 md:px-12 lg:px-28 bg-[#F9FBFF] w-full min-h-screen overflow-hidden">
-        {children}
-      </div>
-      <LayoutFooter isLandPage={true} />
-    </div>
-  );
+function LandPageLayout() {
+    return (
+        <div className=" min-h-screen min-w-screen">
+            <HeaderBar />
+            <div className="px-9 pt-[100px] py-10 md:px-12 lg:px-28 bg-[#F9FBFF] w-full min-h-screen overflow-hidden">
+                <Outlet />
+            </div>
+            <LayoutFooter isLandPage={true} />
+        </div>
+    );
 }
 
 export default LandPageLayout;

@@ -31,14 +31,15 @@ function RouterApp() {
             return (
                 <Route
                     path={item.path}
-                    element={handleRedirect(item)}
                     key={item.path}
+                    element={handleRedirect(item)}
                 >
                     {item?.children && RouteNav(item.children)}
                 </Route>
             );
         });
     };
+
     return <Routes>{RouteNav(routes)}</Routes>;
 }
 

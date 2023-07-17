@@ -13,6 +13,8 @@ import '@rainbow-me/rainbowkit/styles.css';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
+      <HashRouter>
+
     <ConfigProvider
       theme={{
         token: {
@@ -38,13 +40,12 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         }
       }}
     >
-      <HashRouter>
         <WagmiConfig config={wagmiConfig}>
           <RainbowKitProvider chains={chains}>
             <App />
           </RainbowKitProvider>
         </WagmiConfig>
-      </HashRouter>
     </ConfigProvider>
+      </HashRouter>
   </React.StrictMode>
 );

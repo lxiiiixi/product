@@ -6,18 +6,6 @@ interface UserInfoState {
     setUserInfo: (name: string, userEmail: string) => void;
 }
 
-// const userInfoStore = create<UserInfoState>()((set => ({
-//     userInfo: { userName: '', userEmail: '' },
-//     setUserInfo: (name, email) => {
-//         set(() => ({
-//             userInfo: {
-//                 userName: name,
-//                 userEmail: email
-//             }
-//         }));
-//     }
-// })));
-
 const useUserInfoStore = create<UserInfoState>()(
     persist(
         set => ({

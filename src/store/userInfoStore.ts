@@ -1,28 +1,38 @@
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-interface UserInfo {
-  userName: string;
-  setUserName: (name: string) => void;
-  userEmail: string;
-  setUserEmail: (email: string) => void;
+interface UserInfoState {
+    userInfo: { userName: string; userEmail: string };
+    setUserInfo: (name: string, userEmail: string) => void;
 }
 
-const userInfoStore = create<UserInfo>(set => ({
-  userName: 'none',
-  setUserName: name => {
-    set(state => ({
-      ...state,
-      userName: name
-    }));
-  },
+// const userInfoStore = create<UserInfoState>()((set => ({
+//     userInfo: { userName: '', userEmail: '' },
+//     setUserInfo: (name, email) => {
+//         set(() => ({
+//             userInfo: {
+//                 userName: name,
+//                 userEmail: email
+//             }
+//         }));
+//     }
+// })));
 
-  userEmail: 'none',
-  setUserEmail: email => {
-    set(state => ({
-      ...state,
-      userEmail: email
-    }));
-  }
-}));
+const useUserInfoStore = create<UserInfoState>()(
+    persist(
+        set => ({
+            userInfo: { userName: '', userEmail: '' },
+            setUserInfo: (name, email) => {
+                set(() => ({
+                    userInfo: {
+                        userName: name,
+                        userEmail: email
+                    }
+                }));
+            }
+        }),
+        { name: 'fp-user-info' }
+    )
+);
 
-export default userInfoStore;
+export default useUserInfoStore;

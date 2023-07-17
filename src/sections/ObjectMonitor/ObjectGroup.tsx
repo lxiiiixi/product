@@ -1,16 +1,22 @@
 import React from 'react';
 import ObjectGroupHead from './ObjectGroupHead';
 import { ObjectType, ObjectInfo } from '@/config/commonInterface';
-import { Card, Row, Col, message } from 'antd';
+import { Card, Row, Col, message, Button } from 'antd';
 import MonitorObjectCard from './MonitorObjectCard';
 import FPAddCard from '@/components/FPAddCard';
 
 function ObjectGroup({
     objectType,
-    objectLists
+    objectLists,
+    handleOpenObjectModal
 }: {
     objectType: ObjectType;
     objectLists: ObjectInfo[];
+    handleOpenObjectModal: (
+        optType: 'Add' | 'Edit',
+        objectType: ObjectType,
+        editObjectData: null | ObjectInfo
+    ) => void;
 }) {
     return (
         <div className="objects my-2">
@@ -18,7 +24,18 @@ function ObjectGroup({
             <Row gutter={[18, 18]}>
                 {objectLists.map(item => (
                     <Col xs={24} sm={24} md={12} lg={12} key={item._id.$oid}>
-                        {objectType}
+                        <MonitorObjectCard />;
+                        {/* <Button
+                            onClick={() => {
+                                handleOpenModal(
+                                    'Edit',
+                                    objectType,
+                                    objectLists[0]
+                                );
+                            }}
+                        >
+                            edit
+                        </Button> */}
                         {/* <MonitorObjectCard
                             editObject={editObject}
                             deleteObject={deleteObject}
@@ -30,7 +47,11 @@ function ObjectGroup({
                     </Col>
                 ))}
                 <Col xs={24} sm={24} md={12} lg={12}>
-                    <FPAddCard addFunction={() => {}} />
+                    <FPAddCard
+                        addFunction={() => {
+                            handleOpenObjectModal('Add', objectType, null);
+                        }}
+                    />
                 </Col>
             </Row>
         </div>

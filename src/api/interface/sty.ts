@@ -1,6 +1,16 @@
 import Request from '../request';
-import { StrategyModalForm } from '@/sections/Modals/StrategyModal';
 
+/** ----------------------- interface ----------------------- */
+export interface CreateAStyData {
+    address: string;
+    chain_id: string;
+    custom_abi?: string;
+    name: string;
+    params: string;
+    signature: string;
+}
+
+/** ---------------------- functions ----------------------- */
 export function getStyList() {
     return Request({
         method: 'GET',
@@ -8,7 +18,7 @@ export function getStyList() {
     });
 }
 
-export function createASty(addData: StrategyModalForm) {
+export function createASty(addData: CreateAStyData) {
     return Request({
         method: 'POST',
         url: '/api/sty',

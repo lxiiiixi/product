@@ -8,6 +8,7 @@ import FPInput from '@/components/FPInput';
 import API from '@/api';
 import supportedChain from '@/config/supportedChain';
 import { getFuntionsByAbi } from '@/utils/abiTransfer';
+import { CreateAStyData } from '@/api/interface/sty';
 
 // waiting: 新增还是编辑（目前记得编辑的地方好像就是执行策略的时候 暂时未知）
 
@@ -16,14 +17,9 @@ export interface StrategyModalDataProps {
     state: {};
 }
 
-export interface StrategyModalForm {
-    address: string;
-    chain_id: string;
-    custom_abi?: string;
-    name: string;
-    params: string;
-    signature: string;
-    [key: string]: string | undefined; // 一个索引签名，允许使用字符串类型的索引来访问对象的属性
+export interface StrategyModalForm extends CreateAStyData {
+    [key: string]: string | undefined;
+    // 一个索引签名，允许使用字符串类型的索引来访问对象的属性
 }
 
 function StrategyModal({
@@ -114,6 +110,10 @@ function StrategyModal({
                         content: err.response.data.message
                     });
                 });
+        } else {
+            message.warning(
+                'Please input the address and chain of the object first'
+            );
         }
     };
 

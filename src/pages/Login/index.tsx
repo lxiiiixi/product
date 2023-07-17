@@ -1,6 +1,7 @@
+import { useEffect } from 'react';
 import { Form, Input, Button, Card, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import useUserInfoStore from '@/store/userInfoStore';
 
 import API from '@/api';
 interface LoginForm {
@@ -10,26 +11,33 @@ interface LoginForm {
 
 function Login() {
     const navigate = useNavigate();
+    const setUserInfo = useUserInfoStore(state => state.setUserInfo);
 
-    useEffect(() => {
+    const getAndStoreUserInfo = () => {
         API.UserApi.getUserInfo()
             .then(res => {
-                // 已经是登陆状态 不需要再登陆了  =>  是否要直接跳到dashboard告诉用户已经登陆
-                console.log(res);
+                const { nick_name, email } = res.data;
+                setUserInfo(nick_name, email);
+                // 已经是登陆状态 不需要再登陆了  =>  直接跳到dashboard告诉用户已经登陆  =>  或者退出登陆才可以
                 navigate('/dashboard');
             })
             .catch(err => {
                 // 请求错误说明当前用户没有登陆
                 console.log(err);
             });
+    };
+
+    useEffect(() => {
+        getAndStoreUserInfo();
     }, []);
 
     const onFinish = (values: LoginForm) => {
         API.UserApi.login(values)
             .then(res => {
-                console.log(res.data.access_token);
-                navigate('/dashboard');
+                // navigate('/dashboard');
+                getAndStoreUserInfo();
                 message.success('Login successfully!');
+                // Waiting: index.tsx?t=1689577555971:46 Warning: [antd: message] Static function can not consume context like dynamic theme. Please use 'App' component instead.
             })
             .catch(err => {
                 console.log('error', err);

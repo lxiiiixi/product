@@ -18,10 +18,12 @@ import {
     CheckCircleOutlined
 } from '@ant-design/icons';
 import FPBasicModal from '@/components/FPBasicModal';
+import FPInput from '@/components/FPInput';
 
 import { ObjectModalProps } from '@/pages/ObjectMonitor';
-
-export interface ObjectFormData {}
+import { PictureCard } from '@/assets';
+import { AddObjectData } from '@/api/interface/obj';
+import API from '@/api';
 
 const blockchainOption = [
     { value: '1', label: 'Ethereum', chainId: '1' },
@@ -36,7 +38,7 @@ const plainOptions = [
             <span>
                 <span className="text-xs text-gray-500">
                     <MessageOutlined />
-                </span>{' '}
+                </span>
                 Message
             </span>
         ),
@@ -47,7 +49,7 @@ const plainOptions = [
             <span>
                 <span className="text-xs text-gray-500">
                     <PhoneOutlined />
-                </span>{' '}
+                </span>
                 Phone
             </span>
         ),
@@ -58,7 +60,7 @@ const plainOptions = [
             <span>
                 <span className="text-xs text-gray-500">
                     <MailOutlined />
-                </span>{' '}
+                </span>
                 Email
             </span>
         ),
@@ -69,7 +71,7 @@ const plainOptions = [
             <span>
                 <span className="text-xs text-gray-500">
                     <SlackOutlined />
-                </span>{' '}
+                </span>
                 Slack
             </span>
         ),
@@ -80,87 +82,96 @@ const plainOptions = [
 const ObjectModal = ({
     open,
     closeModal,
-    modalProps
+    modalProps,
+    getAndUpdateObjectLists
 }: {
     open: boolean;
     closeModal: () => void;
     modalProps: ObjectModalProps;
+    getAndUpdateObjectLists: () => void;
 }) => {
-    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
-    const { TextArea } = Input;
-
     const { optType, objectType, editObjectData } = modalProps;
-    console.log(optType, objectType, editObjectData);
 
-    const onFinish = item => {
-        // const custom_abi = item.custom_abi || null // "[]"
-        // const addObj = {
-        //     category: objectType,
-        //     address: item.address,
-        //     chain_id: item.chain_id,
-        //     name: item.name
-        // }
-        // console.log(custom_abi, addObj);
-        // if (optType === "Add") {
-        //     const addObject = (addData) => {
-        //         console.log(addData);
-        //         Api.post('/api/obj', addData).then(res => {
-        //             console.log(res);
-        //             closeModal(true)
-        //             messageApi.open({
-        //                 type: 'success',
-        //                 content: "Add successfully",
-        //             });
-        //         }).catch(err => {
-        //             closeModal()
-        //             messageApi.open({
-        //                 type: 'warning',
-        //                 content: err.response.data.message,
-        //             });
-        //         })
-        //     }
-        //     // abi 是可选项，但是这个对象添加成功的前提是我们的abi数据表中存了证地址的默认abi（开源/自定义都可以只要存在）
-        //     if (objectType === "Contract" && !custom_abi) {
-        //         // 如果用户没有输入 abi，就去查数据库，如果数据库也没有，就提示用户输入 abi
-        //         Api.get(`/api/abi/1/${item.address}`).then((res) => {
-        //             addObject(addObj)
-        //         }).catch(err => {
-        //             messageApi.open({
-        //                 type: 'warning',
-        //                 content: 'Please input the abi manually',
-        //             });
-        //         })
-        //     } else {
-        //         // 如果用户输入了abi，就直接添加
-        //         addObject({ ...addObj, custom_abi })
-        //     }
-        // } else if (optType === "Edit") {
-        //     // edit obj info
-        // }
+    const onFinish = (item: AddObjectData) => {
+        console.log(item);
+        if (objectType === null) return;
+
+        const custom_abi = item.custom_abi || null; // "[]"
+        const addObj: AddObjectData = {
+            category: objectType,
+            address: item.address,
+            chain_id: item.chain_id,
+            name: item.name
+        };
+        console.log(custom_abi, addObj);
+        if (optType === 'Add') {
+            const addObject = (addData: AddObjectData) => {
+                console.log(addData);
+                API.ObjApi.addAnObject(addData)
+                    .then(res => {
+                        console.log(res);
+                        message.success(`Add ${item.name} successfully`);
+                        closeModal();
+                        getAndUpdateObjectLists();
+                    })
+                    .catch(err => {
+                        message.error(err.response.data.message);
+                    });
+            };
+            // abi 是可选项，但是这个对象添加成功的前提是我们的abi数据表中存了证地址的默认abi（开源/自定义都可以只要存在）
+            // Contract 类型的对象才需要 abi
+            if (objectType === 'Contract' && !custom_abi) {
+                // 如果用户没有输入 abi，就去查数据库，如果数据库也没有，就提示用户输入 abi
+                API.AbiApi.getAbi(item.chain_id, item.address)
+                    .then(res => {
+                        console.log(res);
+                        addObject(addObj);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        message.warning('Please input the abi manually');
+                    });
+            } else {
+                const submitdata = { ...addObj };
+                if (custom_abi) submitdata.custom_abi = custom_abi;
+                addObject(submitdata);
+            }
+        } else if (optType === 'Edit') {
+            // edit obj info
+        }
     };
+
+    // "Record chain:1,address:0x1111111254EEB25477B68fb85Ed929f73A960582 does not exist or you have no permission"
+    // Waiting: 这里找的是etherscan上一个开源的合约，但是为什么这里显示找不到，需要找后端确认
 
     // abi 这个自动默认以用户自定义为主，如果用户没有自定义，就用数据库存的默认的开源abi
     const setAbi = async () => {
         const address = form.getFieldValue('address');
-        // if (address) {
-        //     // 使用 chainId
-        //     Api.get(`/api/abi/1/${address}`).then(res => {
-        //         // console.log(res);
-        //         form.setFieldsValue({ custom_abi: res.abi })
-        //     }).catch(err => {
-        //         // console.log(err);
-        //         messageApi.open({
-        //             type: 'warning',
-        //             content: 'Abi doesn‘t exsit, please input the abi manually',
-        //         });
-        //     })
-        // } else {
-        //     messageApi.open({
-        //         type: 'warning',
-        //         content: 'Please input the address of object first',
-        //     });
-        // }
+        const chain_id = form.getFieldValue('chain_id');
+        if (address && chain_id) {
+            API.AbiApi.getAbi(chain_id, address)
+                .then(res => {
+                    if (res.status === 200) {
+                        const abi = res.data.abi;
+                        form.setFieldsValue({ custom_abi: abi });
+                    } else {
+                        message.warning(
+                            'Abi doesn‘t exsit, please input the abi manually'
+                        );
+                    }
+                })
+                .catch(err => {
+                    message.open({
+                        type: 'warning',
+                        content: err.response.data.message
+                    });
+                });
+        } else {
+            message.warning(
+                'Please input the address and chain of the object first'
+            );
+        }
     };
 
     return (
@@ -171,26 +182,20 @@ const ObjectModal = ({
             width={800}
             footer={null}
         >
-            {contextHolder}
             <Form
                 form={form}
                 layout="vertical"
                 onFinish={onFinish}
-                name="addObj"
-                initialValues={editObjectData}
+                name="object-form"
+                initialValues={editObjectData ? editObjectData : { name: '' }}
             >
-                <h3 className="text-textGary">Basic Info</h3>
-                <div className="flex justify-between my-2">
+                <h3 className="text-main-textGray">Basic Info</h3>
+                <div className="flex justify-between my-4">
                     <div>
                         <div>Category</div>
                         <p className="mt-2 font-light">{objectType}</p>
                     </div>
-                    <img
-                        alt="logo"
-                        src="/static/picture-card.png"
-                        width={80}
-                        height={80}
-                    />
+                    <img alt="logo" src={PictureCard} width={80} height={80} />
                 </div>
                 <Form.Item
                     name="name"
@@ -198,15 +203,11 @@ const ObjectModal = ({
                     rules={[{ required: true }]}
                 >
                     {optType === 'Add' ? (
-                        <Input
-                            placeholder="Please input the name of object"
-                            className=" border-none bg-gray-200 p-1 pl-2"
-                        />
+                        <FPInput placeholder="Please input the name of object" />
                     ) : (
-                        <Input
+                        <FPInput
                             disabled
                             placeholder="Please input the name of object"
-                            className=" border-none bg-gray-200 p-1 pl-2"
                         />
                     )}
                 </Form.Item>
@@ -220,7 +221,6 @@ const ObjectModal = ({
                             placeholder="Select the blockchain"
                             bordered={false}
                             className="bg-gray-200 rounded-md"
-                            style={{ padding: '3px 0px' }}
                             options={blockchainOption}
                         />
                     ) : (
@@ -239,25 +239,22 @@ const ObjectModal = ({
                     label="Object's Address"
                     rules={[{ required: true }]}
                 >
-                    <Input
-                        placeholder="Please input the Object's Address"
-                        className=" border-none bg-gray-200 p-1 pl-2"
-                    />
+                    <FPInput placeholder="Please input the Object's Address" />
                 </Form.Item>
                 {objectType === 'Contract' && (
                     <>
-                        <h3 className="text-textGary">
-                            ABI{' '}
-                            <span className=" font-light text-sm ml-1">
+                        <h3 className="text-main-textGray">
+                            ABI
+                            <span className="font-light text-sm ml-1">
                                 <InfoCircleOutlined />
-                            </span>{' '}
+                            </span>
                         </h3>
-                        <div className="px-5 py-2 rounded-xl black-linear-gradient-270">
+                        <div className="px-6 py-4 rounded-xl bg-gradient-to-l from-[#434a56] to-[#1d2127]">
                             <div className="flex justify-between text-white pb-2">
                                 <div>
                                     <span className="text-gray-400 mr-2">
                                         <CheckCircleOutlined />
-                                    </span>{' '}
+                                    </span>
                                     Checking passed.
                                 </div>
                                 <Button size="small" onClick={setAbi}>
@@ -268,14 +265,16 @@ const ObjectModal = ({
                                 name="custom_abi"
                                 rules={[{ required: false }]}
                             >
-                                <TextArea rows={4} className=" bg-gray-200" />
+                                <Input.TextArea
+                                    rows={4}
+                                    className="bg-gray-200"
+                                />
                             </Form.Item>
                         </div>
                     </>
                 )}
-                <h3 className="text-textGary">Notifications</h3>
+                <h3 className="text-main-textGray">Notifications</h3>
                 <Form.Item name="channel" initialValue="Email">
-                    {/* <Checkbox.Group options={plainOptions} /> */}
                     <Checkbox.Group style={{ width: '100%' }} disabled={true}>
                         <Row gutter={[0, 18]} style={{ width: '100%' }}>
                             {plainOptions.map(item => (
@@ -294,11 +293,11 @@ const ObjectModal = ({
                         </Row>
                     </Checkbox.Group>
                 </Form.Item>
-                <h3 className="text-textGary">
-                    FP Monitors{' '}
+                <h3 className="text-main-textGray">
+                    FP Monitors
                     <span className=" font-light text-sm ml-1">
                         <InfoCircleOutlined />
-                    </span>{' '}
+                    </span>
                 </h3>
                 <Form.Item name="monitors">
                     <div className="flex justify-start flex-wrap">
@@ -318,7 +317,7 @@ const ObjectModal = ({
                         </div>
                     </div>
                 </Form.Item>
-                <Form.Item className="mt-2 w-full flex justify-center items-center">
+                <Form.Item className="mt-2 w-full flex-center">
                     <Space size="middle">
                         <Button onClick={closeModal}>Cancel</Button>
                         <Button type="primary" htmlType="submit">

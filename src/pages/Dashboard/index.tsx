@@ -9,7 +9,7 @@ import ValueDisplay from '@/sections/Dashboard/ValueDisplay';
 import RiskTable from '@/sections/Dashboard/RiskTable';
 import ObjectTable from '@/sections/Dashboard/ObjectTable';
 
-// import userInfoStore from "@/store/userInfoStore";
+import useGlobalDataStore from '@/store/globalDaraStore';
 
 import {
     ObjectInfo,
@@ -23,13 +23,23 @@ function Dashboard() {
     const [objectList, setObjectList] = useState<ObjectInfo[]>([]);
     const [strategyList, setStrategyList] = useState<StrategyInfo[]>([]);
 
+    const storeObjectLists = useGlobalDataStore(
+        state => state.storeObjectLists
+    );
+    const storeRiskLists = useGlobalDataStore(state => state.storeRiskLists);
+    const storeStrategyLists = useGlobalDataStore(
+        state => state.storeStrategyLists
+    );
+
     // console.log(riskListData);
     // console.log('objectList', objectList);
 
     const getObjectList = () => {
         API.ObjApi.getObjList()
             .then(res => {
-                setObjectList(res.data);
+                const objectLists = res.data;
+                setObjectList(objectLists);
+                storeObjectLists(objectLists);
             })
             .catch(err => {
                 console.log(err);
@@ -39,7 +49,9 @@ function Dashboard() {
     const getRiskList = () => {
         API.RiskApi.getRiskList()
             .then(res => {
-                setRiskListData(res.data);
+                const riskLists = res.data;
+                setRiskListData(riskLists);
+                storeRiskLists(riskLists);
             })
             .catch(err => {
                 console.log(err);
@@ -49,7 +61,9 @@ function Dashboard() {
     const getStrategyList = () => {
         API.StyApi.getStyList()
             .then(res => {
-                setStrategyList(res.data);
+                const strategyList = res.data;
+                setStrategyList(strategyList);
+                storeStrategyLists(strategyList);
             })
             .catch(err => {
                 console.log(err);
@@ -80,7 +94,12 @@ function Dashboard() {
                 assetsValue += item.assets;
             }
         });
-        console.log(dayRiskList, threeDayRiskList, sevenDayRiskList);
+        // console.log(
+        //     'index getRiskAlertData',
+        //     dayRiskList,
+        //     threeDayRiskList,
+        //     sevenDayRiskList
+        // );
 
         dayRiskList.forEach(item => {
             if (riskLevel[item.level]) {

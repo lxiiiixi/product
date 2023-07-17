@@ -1,29 +1,16 @@
-import { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from 'antd';
 import { IssuesCloseOutlined } from '@ant-design/icons';
 
 import RiskCard from '@/sections/RiskAlert/RiskCard';
 import FPPageHeader from '@/components/FPPageHeader';
-import API from '@/api';
+import useGlobalDataStore from '@/store/globalDaraStore';
 
 function RiskAlertDetail() {
     const { id } = useParams();
     const navigate = useNavigate();
-
-    // waiting: 这里需要全局数据的存储
-
-    useEffect(() => {
-        if (!id) return;
-        // Api.get(`/api/risk/${detailId}`)
-        //     .then(res => {
-        //         console.log(res);
-        //         setRiskDetail(res);
-        //     })
-        //     .catch(err => {
-        //         console.log(err);
-        //     });
-    }, [id]);
+    const riskLists = useGlobalDataStore(state => state.riskLists);
+    const displayRisk = riskLists.filter(item => item._id.$oid === id)[0];
 
     return (
         <>
@@ -46,6 +33,7 @@ function RiskAlertDetail() {
                 {/* {Object.keys(riskDetail).length > 0 && (
                     <RiskCard cardData={riskDetail} />
                 )} */}
+                {displayRisk._id && <RiskCard cardData={displayRisk} />}
             </div>
         </>
     );

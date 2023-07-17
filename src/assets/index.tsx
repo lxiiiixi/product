@@ -5,6 +5,7 @@ export { default as Service_1 } from '@/assets/fairyproof/service_1.png';
 export { default as Service_2 } from '@/assets/fairyproof/service_2.png';
 export { default as Service_3 } from '@/assets/fairyproof/service_3.png';
 export { default as DashboardAssets } from '@/assets/fairyproof/dashboard.png';
+export { default as PictureCard } from '@/assets/fairyproof/picture-card.png';
 
 // logo
 export { default as SubstackLogo } from '@/assets/logo/substack_logo.svg';

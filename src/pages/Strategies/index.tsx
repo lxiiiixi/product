@@ -10,6 +10,7 @@ import StrategyCard from '@/sections/Strategies/StrategyCard';
 import StrategyModal, {
     StrategyModalDataProps
 } from '@/sections/Modals/StrategyModal';
+import useGlobalDataStore from '@/store/globalDaraStore';
 
 import { useModal } from '@/hooks/useModal';
 import API from '@/api';
@@ -19,6 +20,9 @@ import { StrategyInfo } from '@/config/commonInterface';
 function Strategies() {
     const { open, openModal, closeModal } = useModal();
     const [strategyList, setStrategyList] = useState<StrategyInfo[]>([]);
+    const storeStrategyLists = useGlobalDataStore(
+        state => state.storeStrategyLists
+    );
     const [modalProps, setModalProps] = useState<StrategyModalDataProps>({
         opt: 'add',
         state: {}
@@ -27,7 +31,9 @@ function Strategies() {
     const getStrategyList = () => {
         API.StyApi.getStyList()
             .then(res => {
-                setStrategyList(res.data);
+                const strategyList = res.data;
+                setStrategyList(strategyList);
+                storeStrategyLists(strategyList);
             })
             .catch(err => {
                 console.log(err);

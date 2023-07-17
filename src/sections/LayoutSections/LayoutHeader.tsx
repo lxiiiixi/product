@@ -3,26 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { Layout, Dropdown, Button, Space } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import userInfoStore from '@/store/userInfoStore';
+import useUserInfoStore from '@/store/userInfoStore';
 import API from '@/api';
 
 function LayoutHeader() {
     const navigate = useNavigate();
-    const { userName } = userInfoStore();
-    const { setUserName, setUserEmail } = userInfoStore();
-
-    useEffect(() => {
-        API.UserApi.getUserInfo()
-            .then(res => {
-                console.log(res);
-                const { nick_name, email } = res.data;
-                setUserName(nick_name);
-                setUserEmail(email);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    }, []);
+    const userInfo = useUserInfoStore(state => state.userInfo);
 
     const handleLoginOut = () => {
         API.UserApi.logout()
@@ -52,7 +38,9 @@ function LayoutHeader() {
         >
             <div className="inline-flex justify-items-center items-center">
                 <Space className="text-gray-400 px-1 flex-center">
-                    <span>{userName ? userName : 'UserName'}</span>
+                    <span>
+                        {userInfo.userName ? userInfo.userName : 'UserName'}
+                    </span>
                     <Button type="text" shape="circle" className="flex-center">
                         <Dropdown
                             menu={{

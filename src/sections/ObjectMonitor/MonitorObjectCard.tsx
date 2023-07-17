@@ -1,5 +1,4 @@
 import { useEffect, useCallback, useMemo, useState } from 'react';
-import { useRouter } from 'next/router';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Card, Row, Col, message, Tooltip } from 'antd';
@@ -17,18 +16,19 @@ import MonitorModal from './modal/monitor_modal';
 import RuleModal from './modal/rule_modal';
 import StrategyModal from './modal/strategy_modal';
 
-const MonitorObjectCard = ({
-    objectData,
-    editObject,
-    deleteObject,
-    objectType,
-    allStrategies,
-    updateMonitoringObjects
-}) => {
+const MonitorObjectCard = (
+    {
+        // objectData,
+        // editObject,
+        // deleteObject,
+        // objectType,
+        // allStrategies,
+        // updateMonitoringObjects
+    }
+) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const router = useRouter();
-    const { _id, address, rules, name, strategies, monitors, status } =
-        objectData;
+    // const { _id, address, rules, name, strategies, monitors, status } =
+    //     objectData;
     const statusColor = {
         Safe: '#00d5a5',
         Danger: '#ff909b',
@@ -37,15 +37,15 @@ const MonitorObjectCard = ({
 
     const [modalOpen, setModalOpen] = useState(false);
 
-    const confirmDeleteObject = () => {
-        deleteObject(_id.$oid);
-        setModalOpen(false);
-    };
+    // const confirmDeleteObject = () => {
+    //     deleteObject(_id.$oid);
+    //     setModalOpen(false);
+    // };
 
-    const closeModal = (ifUpdate = false) => {
-        setModalOpen(false);
-        if (ifUpdate) updateMonitoringObjects();
-    };
+    // const closeModal = (ifUpdate = false) => {
+    //     setModalOpen(false);
+    //     if (ifUpdate) updateMonitoringObjects();
+    // };
 
     return (
         <>
@@ -54,36 +54,36 @@ const MonitorObjectCard = ({
                 className="h-[250px]"
                 title={
                     <div className="text-lg font-normal text-white">
-                        {name}
+                        {/* {name} */}
+                        name
                         <span
                             className="text-xs cursor-pointer mx-1"
                             onClick={() => {
-                                editObject(objectType, objectData);
+                                // editObject(objectType, objectData);
                             }}
                         >
-                            {' '}
-                            <SettingOutlined />{' '}
+                            <SettingOutlined />
                         </span>
                         <span
                             className="text-xs cursor-pointer"
                             onClick={() => {
-                                setModalOpen('delete');
+                                // setModalOpen('delete');
                             }}
                         >
-                            {' '}
-                            <DeleteOutlined />{' '}
+                            <DeleteOutlined />
                         </span>
                     </div>
                 }
                 extra={
                     <span
                         className="px-3 text-xs rounded-lg bg-white"
-                        style={{ color: statusColor[status] }}
+                        // style={{ color: statusColor[status] }}
                     >
-                        {status}
+                        {/* {status} */}
+                        status
                     </span>
                 }
-                headStyle={{ backgroundColor: statusColor[status] }}
+                // headStyle={{ backgroundColor: statusColor[status] }}
             >
                 <div className="flex items-center">
                     <img
@@ -94,62 +94,60 @@ const MonitorObjectCard = ({
                         className="-ml-1"
                     />
                     <span className="bg-indigo-100 px-1 rounded text-xs leading-5 mx-1">
-                        {address}
+                        {/* {address} */}
+                        address
                     </span>
-                    <CopyToClipboard text={address} onCopy={() => {}}>
-                        <Tooltip
-                            placement="top"
-                            title="Copied !"
-                            trigger="click"
-                        >
-                            <span className="text-xs cursor-pointer">
-                                <CopyOutlined />
-                            </span>
-                        </Tooltip>
-                    </CopyToClipboard>
+                    {/* <CopyToClipboard text={address} onCopy={() => {}}> */}
+                    <Tooltip placement="top" title="Copied !" trigger="click">
+                        <span className="text-xs cursor-pointer">
+                            <CopyOutlined />
+                        </span>
+                    </Tooltip>
+                    {/* </CopyToClipboard> */}
                 </div>
                 <Row className="text-gray-500 my-4 flex justify-between">
                     <Col span={8}>
                         <div className="text-xs">Monitoring rules</div>
                         <div className="my-1">
-                            {' '}
-                            {rules?.length ? rules.length : 0}{' '}
+                            {/* {rules?.length ? rules.length : 0} */}
+                            rules number
                             <span
                                 className="text-xs ml-1 text-gray-400 cursor-pointer"
                                 onClick={() => {
-                                    router.push(`/monitor/${_id.$oid}`);
+                                    // router.push(`/monitor/${_id.$oid}`);
                                 }}
                             >
                                 <EditOutlined />
-                            </span>{' '}
+                            </span>
                         </div>
                         {/* <div className="my-1"> {rules?.length ? rules.length : 0} <span className="text-xs ml-1 text-gray-400 cursor-pointer" onClick={() => { setModalOpen("rule") }}><EditOutlined /></span> </div> */}
                     </Col>
                     <Col span={7}>
                         <div className="text-xs">FP Monitors</div>
                         <div className="my-1">
-                            {' '}
-                            {monitors?.length ? monitors.length : 0}
+                            monitor number
+                            {/* {monitors?.length ? monitors.length : 0} */}
                             <span
                                 className="text-xs ml-1 text-gray-400 cursor-pointer"
                                 onClick={() => {
-                                    setModalOpen('monitor');
+                                    // setModalOpen('monitor');
                                 }}
                             >
                                 <EditOutlined />
-                            </span>{' '}
+                            </span>
                         </div>
                     </Col>
                     <Col span={9}>
                         <div className="text-xs">Emergency strategy</div>
                         <div className="my-1 flex items-center">
                             <div className="text-xs text-black">
-                                {strategies}
+                                {/* {strategies} */}
+                                strategies
                             </div>
                             <div
                                 className=" text-gray-400 cursor-pointer ml-1"
                                 onClick={() => {
-                                    setModalOpen('strategy');
+                                    // setModalOpen('strategy');
                                 }}
                             >
                                 <EditOutlined />
@@ -160,7 +158,7 @@ const MonitorObjectCard = ({
                 <div
                     className=" text-xs text-gray-500 absolute bottom-3 right-5 cursor-pointer"
                     onClick={() => {
-                        router.push('./situation');
+                        // router.push('./situation');
                     }}
                 >
                     Security Situation <ArrowRightOutlined />

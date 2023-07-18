@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FPPageHeader from '@/components/FPPageHeader';
 import ObjectGroup from '@/sections/ObjectMonitor/ObjectGroup';
 import ObjectModal from '@/sections/Modals/ObjectModal';
 import { UsergroupDeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import API from '@/api';
 import { useModal } from '@/hooks/useModal';
-
 import { ObjectInfo, ObjectType } from '@/config/commonInterface';
 import useGlobalDataStore from '@/store/globalDaraStore';
+
+import ObjectDeleteModal from '@/sections/Modals/ObjectDeleteModal';
+import MonitorModal from '@/sections/Modals/MonitorModal';
+import SelectStrategyModal from '@/sections/Modals/SelectStrategyModal';
 
 export interface ObjectModalProps {
     optType: null | 'Add' | 'Edit';
@@ -27,6 +30,22 @@ function ObjectMonitor() {
         openModal: openObjectModal,
         closeModal: closeObjectModal
     } = useModal();
+    const {
+        open: objectDeleteModal,
+        openModal: openObjectDeleteModal,
+        closeModal: closeObjectDeleteModal
+    } = useModal();
+    const {
+        open: objectMonitorModal,
+        openModal: openObjectMonitorModal,
+        closeModal: closeObjectMonitorModal
+    } = useModal();
+    const {
+        open: objectStyModal,
+        openModal: openObjectStyModal,
+        closeModal: closeObjectStyModal
+    } = useModal();
+
     const storeObjectLists = useGlobalDataStore(
         state => state.storeObjectLists
     );
@@ -123,6 +142,19 @@ function ObjectMonitor() {
                     getAndUpdateObjectLists={getAndUpdateObjectLists}
                 />
             )}
+            {/* Modals */}
+            <ObjectDeleteModal
+                open={objectDeleteModal}
+                closeModal={closeObjectDeleteModal}
+            />
+            <MonitorModal
+                open={objectMonitorModal}
+                closeModal={closeObjectMonitorModal}
+            />
+            <SelectStrategyModal
+                open={objectStyModal}
+                closeModal={closeObjectStyModal}
+            />
         </div>
     );
 }

@@ -11,3 +11,4 @@ export { default as PictureCard } from '@/assets/fairyproof/picture-card.png';
 export { default as SubstackLogo } from '@/assets/logo/substack_logo.svg';
 export { default as TelegramLogo } from '@/assets/logo/telegram_logo.svg';
 export { default as ThreatenedAssetsLogo } from '@/assets/logo/threatened_assets.png';
+export { default as EthLogo } from '@/assets/logo/eth_logo.png';

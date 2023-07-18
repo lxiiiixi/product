@@ -11,10 +11,7 @@ import {
     CopyOutlined
 } from '@ant-design/icons';
 
-import DeleteModal from '@/components/monitoring/modal/delete_modal';
-import MonitorModal from './modal/monitor_modal';
-import RuleModal from './modal/rule_modal';
-import StrategyModal from './modal/strategy_modal';
+import { EthLogo } from '@/assets';
 
 const MonitorObjectCard = (
     {
@@ -34,8 +31,6 @@ const MonitorObjectCard = (
         Danger: '#ff909b',
         Warning: '#00d5a6'
     };
-
-    const [modalOpen, setModalOpen] = useState(false);
 
     // const confirmDeleteObject = () => {
     //     deleteObject(_id.$oid);
@@ -88,7 +83,7 @@ const MonitorObjectCard = (
                 <div className="flex items-center">
                     <img
                         alt="logo"
-                        src="/static/eth-logo.png"
+                        src={EthLogo}
                         width={22}
                         height={22}
                         className="-ml-1"
@@ -164,10 +159,6 @@ const MonitorObjectCard = (
                     Security Situation <ArrowRightOutlined />
                 </div>
             </Card>
-            {/* {modalOpen === "rule" && <RuleModal open={modalOpen === "rule"} closeModal={closeModal} objInfo={objectData} messageApi={messageApi} />}
-            {modalOpen === "monitor" && <MonitorModal open={modalOpen === "monitor"} closeModal={closeModal} />}
-            {modalOpen === "strategy" && <StrategyModal open={modalOpen === "strategy"} closeModal={closeModal} objId={_id.$oid} strategies={strategies} allStrategies={allStrategies} messageApi={messageApi} />}
-            {modalOpen === "delete" && <DeleteModal open={modalOpen === "delete"} closeModal={closeModal} confirmDeleteObject={confirmDeleteObject} />} */}
         </>
     );
 };

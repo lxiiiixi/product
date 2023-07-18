@@ -1,28 +1,34 @@
 import FPBasicModal from '@/components/FPBasicModal';
-import { Form, Radio, Space, Button } from 'antd';
-// import Api from '@/utils/api';
+import { Form, Radio, Space, Button, message } from 'antd';
+import useGlobalDataStore from '@/store/globalDaraStore';
+import { StrategyModalProps } from '@/pages/ObjectMonitor';
+import API from '@/api';
 
 const SelectStrategyModal = ({
     open,
-    closeModal
+    closeModal,
+    strategyModalProps,
+    getAndUpdateObjectLists
 }: {
     open: boolean;
     closeModal: () => void;
+    strategyModalProps: StrategyModalProps;
+    getAndUpdateObjectLists: () => void;
 }) => {
-    // console.log(strategies);
+    const strategyLists = useGlobalDataStore(state => state.strategyLists);
+    const strategies = strategyLists.map(item => item.name);
+    const { objectId, strategy: oldStrategy } = strategyModalProps;
+
     const onFinish = (item: { strategy: string }) => {
-        console.log(item);
-        // Api.put("/api/obj/strategy/" + objId, { value: [item.strategy] }).then(res => {
-        //     // console.log(res);
-        //     closeModal(true)
-        // }).catch(err => {
-        //     // console.log(err);
-        //     messageApi.open({
-        //         type: 'warning',
-        //         content: err.response.data.message,
-        //     });
-        //     closeModal()
-        // })
+        console.log([item.strategy]);
+        API.ObjApi.updateStrategy(objectId as string, [item.strategy])
+            .then(res => {
+                closeModal();
+                getAndUpdateObjectLists();
+            })
+            .catch(err => {
+                message.error(err.response.data.message);
+            });
     };
 
     return (
@@ -34,18 +40,16 @@ const SelectStrategyModal = ({
         >
             <Form
                 onFinish={onFinish}
-                // initialValues={{ strategy: !!strategies ? strategies[0] : '' }}
+                initialValues={{ strategy: !!oldStrategy ? oldStrategy : '' }}
             >
                 <Form.Item name="strategy">
                     <Radio.Group>
                         <Space direction="vertical" size="middle">
-                            {/* 全局数据获取 */}
-
-                            {/* {allStrategies.map((item, index) => (
+                            {strategies.map((item, index) => (
                                 <Radio key={index} value={item}>
                                     {item}
                                 </Radio>
-                            ))} */}
+                            ))}
                         </Space>
                     </Radio.Group>
                 </Form.Item>

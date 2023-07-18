@@ -1,15 +1,34 @@
 import FPBasicModal from '@/components/FPBasicModal';
-import { Form, Checkbox, Space, Button } from 'antd';
+import { Space, Button, message } from 'antd';
+import { DeleteObjectModalProps } from '@/pages/ObjectMonitor';
+import API from '@/api';
 
 const ObjectDeleteModal = ({
     open,
-    closeModal
-} // confirmDeleteObject
-: {
+    closeModal,
+    deleteModalProps,
+    getAndUpdateObjectLists
+}: {
     open: boolean;
     closeModal: () => void;
-    // confirmDeleteObject: () => void;
+    deleteModalProps: DeleteObjectModalProps;
+    getAndUpdateObjectLists: () => void;
 }) => {
+    const { objectId, objectName } = deleteModalProps;
+
+    const handleDelete = () => {
+        API.ObjApi.deleteAnObject(objectId as string)
+            .then(res => {
+                message.success('Success!');
+                getAndUpdateObjectLists();
+                closeModal();
+            })
+            .catch(err => {
+                message.error(err.response.data.message);
+            });
+        // getAndUpdateObjectLists()
+    };
+
     return (
         <FPBasicModal
             title="Delete the object"
@@ -20,14 +39,11 @@ const ObjectDeleteModal = ({
         >
             {/* <div className="flex-center"> */}
             <div className="text-center my-4">
-                Are you sure to delete the object?
+                Are you sure to delete {objectName}?
             </div>
-            <Space size="middle" className="flex-center my-3">
+            <Space size="middle" className="flex-center my-7">
                 <Button onClick={closeModal}>Cancel</Button>
-                <Button
-                    type="primary"
-                    //  onClick={confirmDeleteObject}
-                >
+                <Button type="primary" onClick={handleDelete}>
                     Delete
                 </Button>
             </Space>

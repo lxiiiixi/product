@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import FPPageHeader from '@/components/FPPageHeader';
 import ObjectGroup from '@/sections/ObjectMonitor/ObjectGroup';
 import ObjectModal from '@/sections/Modals/ObjectModal';
-import { UsergroupDeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { UsergroupDeleteOutlined } from '@ant-design/icons';
 import API from '@/api';
 import { useModal } from '@/hooks/useModal';
 import { ObjectInfo, ObjectType } from '@/config/commonInterface';
@@ -18,10 +18,30 @@ export interface ObjectModalProps {
     editObjectData: null | ObjectInfo;
 }
 
-const defaultModalProps: ObjectModalProps = {
+export interface StrategyModalProps {
+    objectId: null | string; // 当前操作对象的id
+    strategy: null | string; // 当前编辑对象的策略
+}
+
+export interface DeleteObjectModalProps {
+    objectId: null | string; // 当前操作对象的id
+    objectName: null | string;
+}
+
+const defaultObjectModalProps: ObjectModalProps = {
     optType: null,
     objectType: null,
     editObjectData: null
+};
+
+const defaultStrategyModalProps: StrategyModalProps = {
+    objectId: null,
+    strategy: null
+};
+
+const defaultDeleteModalProps: DeleteObjectModalProps = {
+    objectId: null,
+    objectName: null
 };
 
 function ObjectMonitor() {
@@ -53,8 +73,13 @@ function ObjectMonitor() {
     const [monitoringObjects, setMonitoringObjects] = useState<ObjectInfo[]>(
         []
     );
-    const [objectModalProps, setObjectModalProps] =
-        useState<ObjectModalProps>(defaultModalProps);
+    const [objectModalProps, setObjectModalProps] = useState<ObjectModalProps>(
+        defaultObjectModalProps
+    );
+    const [strategyModalProps, setStrategyModalProps] =
+        useState<StrategyModalProps>(defaultStrategyModalProps);
+    const [deleteModalProps, setDeleteModalProps] =
+        useState<DeleteObjectModalProps>(defaultDeleteModalProps);
 
     const getAndUpdateObjectLists = () => {
         API.ObjApi.getObjList()
@@ -68,6 +93,10 @@ function ObjectMonitor() {
             });
     };
 
+    useEffect(() => {
+        getAndUpdateObjectLists();
+    }, []);
+
     const handleOpenObjectModal = (
         optType: 'Add' | 'Edit',
         objectType: ObjectType,
@@ -75,14 +104,14 @@ function ObjectMonitor() {
     ) => {
         if (optType === 'Add') {
             setObjectModalProps({
-                ...defaultModalProps,
+                ...defaultObjectModalProps,
                 optType,
                 objectType
             });
         } else if (optType === 'Edit') {
             if (editObjectData) {
                 setObjectModalProps({
-                    ...defaultModalProps,
+                    ...defaultObjectModalProps,
                     optType,
                     objectType,
                     editObjectData
@@ -96,12 +125,35 @@ function ObjectMonitor() {
 
     const handleCloseObjectModal = () => {
         closeObjectModal();
-        setObjectModalProps(defaultModalProps);
+        setObjectModalProps(defaultObjectModalProps);
     };
 
-    useEffect(() => {
-        getAndUpdateObjectLists();
-    }, []);
+    const handleOpenDeleteObjectModal = (
+        objectId: string,
+        objectName: string
+    ) => {
+        setDeleteModalProps({ objectId, objectName });
+        openObjectDeleteModal();
+    };
+
+    const handleCloseDeleteObjectModal = () => {
+        setDeleteModalProps(defaultDeleteModalProps);
+        closeObjectDeleteModal();
+    };
+
+    const handleOpenMonitorModal = () => {
+        openObjectMonitorModal();
+    };
+
+    const handleOpenStyModal = (objectId: string, strategy: string | null) => {
+        setStrategyModalProps({ objectId, strategy });
+        openObjectStyModal();
+    };
+
+    const handleCloseStyModal = () => {
+        closeObjectStyModal();
+        setStrategyModalProps(defaultStrategyModalProps);
+    };
 
     return (
         <div>
@@ -109,30 +161,23 @@ function ObjectMonitor() {
                 icon={<UsergroupDeleteOutlined />}
                 text="Object Monitoring"
             />
-            {/* Token */}
-            <ObjectGroup
-                objectType={ObjectType.Token}
-                objectLists={monitoringObjects.filter(
-                    item => item.category === ObjectType.Token
-                )}
-                handleOpenObjectModal={handleOpenObjectModal}
-            />
-            {/* Contract */}
-            <ObjectGroup
-                objectType={ObjectType.Contract}
-                objectLists={monitoringObjects.filter(
-                    item => item.category === ObjectType.Contract
-                )}
-                handleOpenObjectModal={handleOpenObjectModal}
-            />
-            {/* EOA */}
-            <ObjectGroup
-                objectType={ObjectType.EOA}
-                objectLists={monitoringObjects.filter(
-                    item => item.category === ObjectType.EOA
-                )}
-                handleOpenObjectModal={handleOpenObjectModal}
-            />
+            {Object.values(ObjectType).map(item => {
+                return (
+                    <ObjectGroup
+                        key={item}
+                        objectType={item}
+                        handleOpenObjectModal={handleOpenObjectModal}
+                        handleOpenDeleteObjectModal={
+                            handleOpenDeleteObjectModal
+                        }
+                        handleOpenMonitorModal={handleOpenMonitorModal}
+                        handleOpenStyModal={handleOpenStyModal}
+                        objectLists={monitoringObjects.filter(
+                            list => list.category === item
+                        )}
+                    />
+                );
+            })}
             {/* Object Modal */}
             {objectModalProps.optType && (
                 <ObjectModal
@@ -143,18 +188,26 @@ function ObjectMonitor() {
                 />
             )}
             {/* Modals */}
-            <ObjectDeleteModal
-                open={objectDeleteModal}
-                closeModal={closeObjectDeleteModal}
-            />
+            {deleteModalProps.objectId && (
+                <ObjectDeleteModal
+                    open={objectDeleteModal}
+                    closeModal={handleCloseDeleteObjectModal}
+                    deleteModalProps={deleteModalProps}
+                    getAndUpdateObjectLists={getAndUpdateObjectLists}
+                />
+            )}
             <MonitorModal
                 open={objectMonitorModal}
                 closeModal={closeObjectMonitorModal}
             />
-            <SelectStrategyModal
-                open={objectStyModal}
-                closeModal={closeObjectStyModal}
-            />
+            {strategyModalProps.objectId && (
+                <SelectStrategyModal
+                    open={objectStyModal}
+                    closeModal={handleCloseStyModal}
+                    strategyModalProps={strategyModalProps}
+                    getAndUpdateObjectLists={getAndUpdateObjectLists}
+                />
+            )}
         </div>
     );
 }

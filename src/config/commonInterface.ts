@@ -3,10 +3,17 @@ export enum ObjectType {
     EOA = 'EOA',
     Token = 'Token'
 }
+
 export enum RiskStatus {
     Processed = 'Processed',
     UnProcessed = 'UnProcessed',
     Ignored = 'Ignored'
+}
+
+export enum ObjectStatus {
+    Safe = 'Safe',
+    Danger = 'Danger',
+    Warning = 'Warning'
 }
 
 /** 一条规则下一条参数的信息 */
@@ -37,7 +44,7 @@ export interface ObjectInfo {
     name: string;
     notifications: string[]; // 通知方式(email,phone,slack,message)
     rules?: RuleInfo[];
-    status?: string;
+    status?: ObjectStatus;
     strategies?: string[]; // 所有绑定的策略ID
     user_id: string;
 }

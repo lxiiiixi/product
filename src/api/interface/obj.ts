@@ -27,3 +27,18 @@ export function addAnObject(newData: AddObjectData) {
         data: newData
     });
 }
+
+export function updateStrategy(id: string, newStrategy: string[]) {
+    return Request({
+        method: 'PUT',
+        url: `/api/obj/strategy/${id}`,
+        data: { value: newStrategy }
+    });
+}
+
+export function deleteAnObject(id: string) {
+    return Request({
+        method: 'DELETE',
+        url: `/api/obj/${id}`
+    });
+}

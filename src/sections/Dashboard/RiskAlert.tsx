@@ -37,6 +37,7 @@ function RiskAlert({ riskLevel }: RiskAlertProps) {
             className="h-full bg-[#f3f8fe]"
             extra={<FPRadio options={options} />}
         >
+            {/* waiting: 首页的 Risk Alert 部分展示计算 */}
             <Row className="flex items-end">
                 {riskLevel &&
                     Object.keys(riskLevel).map((item, index) => {

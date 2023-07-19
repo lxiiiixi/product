@@ -3,12 +3,14 @@ import { RuleInfo, RuleParamInfo } from '@/config/commonInterface';
 
 /**
  * @description 将从 Form 中获取的 contract rule 数据转换成接口需要的格式
- * @param {*} input
- * @returns
  */
+
+interface RuleMap {
+    [ruleIndex: number]: RuleInfo;
+}
 function transformContractRules(input: RulesFormData): RuleInfo[] {
     let output = [];
-    let ruleMap = {};
+    let ruleMap: RuleMap = {};
 
     for (const key in input) {
         const [rulePrefix, attribute, ...rest] = key.split('-');
@@ -26,6 +28,7 @@ function transformContractRules(input: RulesFormData): RuleInfo[] {
         if (attribute.includes('params')) {
             const paramIndex = parseInt(attribute.replace('params', ''));
             const paramValue = rest[0];
+
             if (!ruleMap[ruleIndex].params[paramIndex]) {
                 ruleMap[ruleIndex].params[paramIndex] = { index: paramIndex };
             }
@@ -53,8 +56,6 @@ function transformContractRules(input: RulesFormData): RuleInfo[] {
 
 /**
  * @description 将从 contract rule 接口获取的数据转换成 Form 需要的格式
- * @param {*} input
- * @returns
  */
 
 function reverseContractRules(input: RuleInfo[]): RulesFormData {

@@ -1,7 +1,7 @@
 export enum ObjectType {
+    Token = 'Token',
     Contract = 'Contract',
-    EOA = 'EOA',
-    Token = 'Token'
+    EOA = 'EOA'
 }
 
 export enum RiskStatus {

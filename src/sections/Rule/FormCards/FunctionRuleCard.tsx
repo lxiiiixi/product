@@ -38,7 +38,8 @@ const FunctionRuleCard = ({
                         item.stateMutability !== 'pure'
                 )
                 .map(item => ({
-                    value: item.name,
+                    key: item.signature,
+                    value: item.name, // waiting: 函数名可能会重复，最好改成函数签名
                     label: item.name
                 })),
         [functionsByAbi]
@@ -143,6 +144,8 @@ const FunctionRuleCard = ({
     };
 
     const handleFunctionChange = (value: string) => {
+        console.log(value);
+
         setFunc(value);
         const signature = functionsByAbi.find(item => item.name === value)
             ?.signature;

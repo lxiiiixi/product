@@ -57,6 +57,8 @@ function PageLayout() {
         getStrategyList();
     }, []);
 
+    // waiting: 思考一下是不是这里请求了之后content组件内其实都可以不需要首次请求了呢
+
     return (
         <Layout>
             <LayoutSider />

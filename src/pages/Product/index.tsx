@@ -3,6 +3,7 @@ import { Button } from 'antd';
 import { IntroIndex } from '@/assets';
 
 function Product() {
+    // waiting: 落地页字体的展示有一定问题
     return (
         <div className="relative">
             <div className="z-20 lg:w-1/2 pt-10 text-[#323e51]">

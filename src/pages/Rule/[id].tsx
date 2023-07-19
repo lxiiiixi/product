@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { UsergroupDeleteOutlined } from '@ant-design/icons';
 import { Button, Form, message } from 'antd';
 import FPPageHeader from '@/components/FPPageHeader';
 import HeaderCard from '@/sections/Rule/HeaderCard';
 import ContractForm from '@/sections/Rule/ContractForm';
+import TokenForm from '@/sections/Rule/TokenForm';
 import useGlobalDataStore from '@/store/globalDaraStore';
 import {
     reverseContractRules,
@@ -30,14 +31,17 @@ function ObjectRuleDetail() {
 
     const { _id, name, address, chain_id, category, rules } = displayObject;
 
+    console.log(displayObject);
+
     const formInitialValues = useMemo(() => {
+        if (!rules) return {};
         switch (category) {
             case 'Contract':
                 return reverseContractRules(rules as RuleInfo[]);
             case 'Token':
-                return reverseContractRules(rules as RuleInfo[]); // waiting
+                return reverseContractRules(rules as RuleInfo[]); // waiting 对Token数据的处理
             case 'EOA':
-                return reverseContractRules(rules as RuleInfo[]); // waiting
+                return reverseContractRules(rules as RuleInfo[]); // waiting 对EOA数据的处理
         }
     }, [category]);
 
@@ -142,7 +146,10 @@ function ObjectRuleDetail() {
                         handleSetSelector={handleSetSelector}
                     />
                 )}
-                {/* {category === 'Token' && <ContractForm />} */}
+                {category === 'Token' && (
+                    <TokenForm objectInfo={displayObject} />
+                )}
+                {category === 'EOA' && <TokenForm objectInfo={displayObject} />}
             </Form>
         </div>
     );

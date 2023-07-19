@@ -1,6 +1,7 @@
 import Request from '../request';
 
 import { ObjectType } from '@/config/commonInterface';
+import { RuleInfo } from '@/config/commonInterface';
 
 /** ----------------------- interface ----------------------- */
 export interface AddObjectData {
@@ -40,5 +41,13 @@ export function deleteAnObject(id: string) {
     return Request({
         method: 'DELETE',
         url: `/api/obj/${id}`
+    });
+}
+
+export function updateRule(id: string, newRule: RuleInfo[]) {
+    return Request({
+        method: 'PUT',
+        url: `/api/obj/rule/${id}`,
+        data: newRule
     });
 }

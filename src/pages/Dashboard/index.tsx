@@ -1,8 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Row, Col } from 'antd';
 
-import API from '@/api';
-
 import More from '@/sections/Dashboard/More';
 import RiskAlert from '@/sections/Dashboard/RiskAlert';
 import ValueDisplay from '@/sections/Dashboard/ValueDisplay';
@@ -11,70 +9,15 @@ import ObjectTable from '@/sections/Dashboard/ObjectTable';
 
 import useGlobalDataStore from '@/store/globalDaraStore';
 
-import {
-    ObjectInfo,
-    RiskInfo,
-    RiskStatus,
-    StrategyInfo
-} from '@/config/commonInterface';
+import { RiskInfo, RiskStatus } from '@/config/commonInterface';
 
 function Dashboard() {
-    const [riskListData, setRiskListData] = useState<RiskInfo[]>([]);
-    const [objectList, setObjectList] = useState<ObjectInfo[]>([]);
-    const [strategyList, setStrategyList] = useState<StrategyInfo[]>([]);
-
-    const storeObjectLists = useGlobalDataStore(
-        state => state.storeObjectLists
-    );
-    const storeRiskLists = useGlobalDataStore(state => state.storeRiskLists);
-    const storeStrategyLists = useGlobalDataStore(
-        state => state.storeStrategyLists
-    );
+    const objectList = useGlobalDataStore(state => state.objectLists);
+    const riskList = useGlobalDataStore(state => state.riskLists);
+    const strategyList = useGlobalDataStore(state => state.strategyLists);
 
     // console.log(riskListData);
     // console.log('objectList', objectList);
-
-    const getObjectList = () => {
-        API.ObjApi.getObjList()
-            .then(res => {
-                const objectLists = res.data;
-                setObjectList(objectLists);
-                storeObjectLists(objectLists);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
-
-    const getRiskList = () => {
-        API.RiskApi.getRiskList()
-            .then(res => {
-                const riskLists = res.data;
-                setRiskListData(riskLists);
-                storeRiskLists(riskLists);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
-
-    const getStrategyList = () => {
-        API.StyApi.getStyList()
-            .then(res => {
-                const strategyList = res.data;
-                setStrategyList(strategyList);
-                storeStrategyLists(strategyList);
-            })
-            .catch(err => {
-                console.log(err);
-            });
-    };
-
-    useEffect(() => {
-        getObjectList();
-        getRiskList();
-        getStrategyList();
-    }, []);
 
     const getRiskAlertData = (data: RiskInfo[]) => {
         let dayRiskList: RiskInfo[] = [];
@@ -126,8 +69,8 @@ function Dashboard() {
     };
 
     const { riskLevel, assetsValue } = useMemo(
-        () => getRiskAlertData(riskListData),
-        [riskListData]
+        () => getRiskAlertData(riskList),
+        [riskList]
     );
 
     return (
@@ -144,7 +87,7 @@ function Dashboard() {
                     />
                 </Col>
             </Row>
-            <RiskTable riskListData={riskListData} />
+            <RiskTable riskListData={riskList} />
             <ObjectTable objectList={objectList} />
         </div>
     );

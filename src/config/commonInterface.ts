@@ -29,7 +29,7 @@ export interface RuleParamInfo {
 export interface RuleInfo {
     level: string;
     name: string;
-    params?: RuleParamInfo[];
+    params?: RuleParamInfo[]; // 只有合约才有，EOA和Token没有此项(函数选择器的长度只有8即前4字节，而事件选择器的长度为64)
     selector?: string;
 }
 

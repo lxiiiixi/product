@@ -40,16 +40,6 @@ const MonitorObjectCard = ({
         Warning: '#00d5a6'
     };
 
-    // const confirmDeleteObject = () => {
-    //     deleteObject(_id.$oid);
-    //     setModalOpen(false);
-    // };
-
-    // const closeModal = (ifUpdate = false) => {
-    //     setModalOpen(false);
-    //     if (ifUpdate) updateMonitoringObjects();
-    // };
-
     return (
         <FPCard
             className="h-[250px]"
@@ -120,13 +110,12 @@ const MonitorObjectCard = ({
                         <span
                             className="text-xs ml-1 text-gray-400 cursor-pointer"
                             onClick={() => {
-                                // router.push(`/monitor/${_id.$oid}`);
+                                navigate('../rule/' + _id.$oid);
                             }}
                         >
                             <EditOutlined />
                         </span>
                     </div>
-                    {/* <div className="my-1"> {rules?.length ? rules.length : 0} <span className="text-xs ml-1 text-gray-400 cursor-pointer" onClick={() => { setModalOpen("rule") }}><EditOutlined /></span> </div> */}
                 </Col>
                 <Col span={7}>
                     <div className="text-xs">FP Monitors</div>
@@ -164,7 +153,6 @@ const MonitorObjectCard = ({
             <div
                 className=" text-xs text-gray-500 absolute bottom-3 right-5 cursor-pointer"
                 onClick={() => {
-                    // router.push('./situation');
                     navigate('../situation');
                 }}
             >

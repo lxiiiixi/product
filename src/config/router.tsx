@@ -14,6 +14,7 @@ const Situation = lazy(() => import('@/pages/Situation'));
 const Service = lazy(() => import('@/pages/Service'));
 const RiskAlert = lazy(() => import('@/pages/RiskAlert'));
 const RiskAlertDetail = lazy(() => import('@/pages/RiskAlert/[id]'));
+const ObjectRuleDetail = lazy(() => import('@/pages/Rule/[id]'));
 
 const NotFound = lazy(() => import('@/pages/Others/404'));
 const Components = lazy(() => import('@/pages/Others/Components'));
@@ -59,6 +60,15 @@ const routes: RouteObject[] = [
             {
                 path: '/service',
                 element: lazyLoad(<Service />)
+            },
+            {
+                path: '/rule',
+                children: [
+                    {
+                        path: '/rule/:id',
+                        element: lazyLoad(<ObjectRuleDetail />)
+                    }
+                ]
             }
         ]
     },

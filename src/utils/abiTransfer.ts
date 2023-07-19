@@ -1,5 +1,27 @@
 import { ethers } from 'ethers';
 
+export interface FunctionsByAbiData {
+    signature: string;
+    constant: boolean;
+    outputs?: ethers.utils.ParamType[] | undefined;
+    stateMutability: string;
+    payable: boolean;
+    gas?: ethers.BigNumber | undefined;
+    type: string;
+    name: string;
+    inputs: ethers.utils.ParamType[];
+    _isFragment: boolean;
+}
+
+export interface EventsByAbiData {
+    signature: string;
+    anonymous: boolean;
+    type: string;
+    name: string;
+    inputs: ethers.utils.ParamType[];
+    _isFragment: boolean;
+}
+
 const getAbiInterface = (abi: string) => {
     if (typeof abi === 'string') abi = JSON.parse(abi);
     if (abi && abi.length === 0) return null;
@@ -13,7 +35,7 @@ const getAbiInterface = (abi: string) => {
  * @return {Array} functions which include all data of function
  * @comment 当前拿到的是所有function的数据，如果需要进一步的筛选，在需要的地方拿到所有的数据后筛选。
  */
-const getFuntionsByAbi = (abi: string) => {
+const getFuntionsByAbi = (abi: string): FunctionsByAbiData[] | [] => {
     const iface = getAbiInterface(abi);
     if (!iface) return [];
     const functions = iface.functions;
@@ -32,7 +54,7 @@ const getFuntionsByAbi = (abi: string) => {
  * @param {abi} abi
  * @return {Array} functions which include all data of function
  */
-const getEventsByAbi = (abi: string) => {
+const getEventsByAbi = (abi: string): EventsByAbiData[] | [] => {
     const iface = getAbiInterface(abi);
     if (!iface) return [];
     const events = iface.events;

@@ -13,6 +13,7 @@
 -   UI: Antd
 -   Code specification: prettier + eslint
 -   Request: Axios
+-   State Management: Zustand
 
 # Procedure
 

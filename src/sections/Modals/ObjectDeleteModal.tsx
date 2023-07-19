@@ -37,7 +37,6 @@ const ObjectDeleteModal = ({
             closeModal={closeModal}
             footer={null}
         >
-            {/* <div className="flex-center"> */}
             <div className="text-center my-4">
                 Are you sure to delete {objectName}?
             </div>

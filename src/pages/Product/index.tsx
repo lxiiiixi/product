@@ -1,19 +1,22 @@
 // import React from 'react'
-import { Button } from 'antd';
+import { Button, Space } from 'antd';
 import { IntroIndex } from '@/assets';
+import '@fontsource-variable/oswald/index.css';
 
 function Product() {
-    // waiting: 落地页字体的展示有一定问题
     return (
-        <div className="relative">
-            <div className="z-20 lg:w-1/2 pt-10 text-[#323e51]">
-                <div className="text-6xl leading-8 font-['Oswald'] font-bold">
+        <div className="relative h-fit">
+            <div className="z-50 lg:w-1/2 pt-16 text-[#323e51]">
+                <div
+                    className="text-7xl leading-[0.94] font-bold"
+                    style={{ fontFamily: 'Oswald Variable' }}
+                >
                     <p>Together</p>
                     <p>we can make</p>
                     <p>the world of Web3.0</p>
                     <p>a safer place.</p>
                 </div>
-                <div className="text-lg leading-normal inter-stitle my-3">
+                <div className="text-lg leading-normal inter-stitle my-5 text-main-textGray">
                     <p>
                         Fairyproof provides one-stop solutions that
                         intelligently and comprehensively monitor the overall
@@ -22,8 +25,8 @@ function Product() {
                         overall ecosystem’s security situation.
                     </p>
                 </div>
-                <div className="flex items-left justify-left">
-                    <a href="./signup">
+                <Space>
+                    <a href="/#/product/signup">
                         <Button
                             type="primary"
                             size="large"
@@ -43,7 +46,7 @@ function Product() {
                             Sign in
                         </Button>
                     </a>
-                </div>
+                </Space>
             </div>
             <img
                 src={IntroIndex}

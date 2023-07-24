@@ -801,6 +801,11 @@
     "@ethersproject/properties" "^5.7.0"
     "@ethersproject/strings" "^5.7.0"
 
+"@fontsource-variable/oswald@^5.0.5":
+  version "5.0.5"
+  resolved "https://registry.npmmirror.com/@fontsource-variable/oswald/-/oswald-5.0.5.tgz#36a8cde115ceab3ddd53ad4b7859aa344ae64add"
+  integrity sha512-V4beFWXEmUZ36Bo0wkjpRUWpvxGzBk/2siMDIsuY2XFp3EHxiaHuWmcca5sE6xiiHKGLQKFyNmqar6baaVrlZA==
+
 "@humanwhocodes/config-array@^0.11.10":
   version "0.11.10"
   resolved "https://registry.npmmirror.com/@humanwhocodes/config-array/-/config-array-0.11.10.tgz#5a3ffe32cc9306365fb3fd572596cd602d5e12d2"

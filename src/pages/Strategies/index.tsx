@@ -19,7 +19,9 @@ import { StrategyInfo } from '@/config/commonInterface';
 
 function Strategies() {
     const { open, openModal, closeModal } = useModal();
-    const [strategyList, setStrategyList] = useState<StrategyInfo[]>([]);
+    const [strategyList, setStrategyList] = useState<StrategyInfo[]>(
+        useGlobalDataStore(state => state.strategyLists)
+    );
     const storeStrategyLists = useGlobalDataStore(
         state => state.storeStrategyLists
     );
@@ -27,6 +29,7 @@ function Strategies() {
         opt: 'add',
         state: {}
     });
+    // waiting: 表达初始值的设置
 
     const getStrategyList = () => {
         API.StyApi.getStyList()
@@ -40,9 +43,9 @@ function Strategies() {
             });
     };
 
-    useEffect(() => {
-        getStrategyList();
-    }, []);
+    // useEffect(() => {
+    //     getStrategyList();
+    // }, []);
 
     const handleDeleteStrategy = (id: string) => {
         API.StyApi.deleteASty(id)

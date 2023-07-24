@@ -71,7 +71,7 @@ function ObjectMonitor() {
     );
 
     const [monitoringObjects, setMonitoringObjects] = useState<ObjectInfo[]>(
-        []
+        useGlobalDataStore(state => state.objectLists)
     );
     const [objectModalProps, setObjectModalProps] = useState<ObjectModalProps>(
         defaultObjectModalProps
@@ -93,9 +93,9 @@ function ObjectMonitor() {
             });
     };
 
-    useEffect(() => {
-        getAndUpdateObjectLists();
-    }, []);
+    // useEffect(() => {
+    //     getAndUpdateObjectLists();
+    // }, []);
 
     const handleOpenObjectModal = (
         optType: 'Add' | 'Edit',

@@ -8,6 +8,7 @@ import ContactCard from '@/sections/Strategies/ContactCard';
 import FilterLine from '@/sections/RiskAlert/FilterLine';
 import RiskCard from '@/sections/RiskAlert/RiskCard';
 
+import useGlobalDataStore from '@/store/globalDaraStore';
 import { RiskStatus, RiskInfo } from '@/config/commonInterface';
 import API from '@/api';
 
@@ -18,7 +19,9 @@ export interface FilterProps {
 }
 
 function ObjectMonitor() {
-    const [riskLists, setRiskLists] = useState<RiskInfo[]>([]);
+    const [riskLists, setRiskLists] = useState<RiskInfo[]>(
+        useGlobalDataStore(state => state.riskLists)
+    );
     const [filters, setFilters] = useState<FilterProps>({
         status: RiskStatus.UnProcessed,
         level: 'All',
@@ -35,9 +38,9 @@ function ObjectMonitor() {
             });
     };
 
-    useEffect(() => {
-        getRiskLists();
-    }, []);
+    // useEffect(() => {
+    //     getRiskLists();
+    // }, []);
 
     const handleFilter = (name: keyof FilterProps, value: string) => {
         setFilters({ ...filters, [name]: value });

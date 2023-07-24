@@ -1,43 +1,22 @@
-import { useEffect } from 'react';
 import { Form, Input, Button, Card, message, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import useUserInfoStore from '@/store/userInfoStore';
 
 import API from '@/api';
-
 interface LoginForm {
+    nick_name: string;
     email: string;
     password: string;
 }
 
-function Login() {
+function SignUp() {
     const navigate = useNavigate();
-    const setUserInfo = useUserInfoStore(state => state.setUserInfo);
-
-    const getAndStoreUserInfo = () => {
-        API.UserApi.getUserInfo()
-            .then(res => {
-                const { nick_name, email } = res.data;
-                setUserInfo(nick_name, email);
-                navigate('/dashboard');
-            })
-            .catch(err => {
-                // 请求错误说明当前用户没有登陆
-                console.log(err);
-            });
-    };
-
-    useEffect(() => {
-        getAndStoreUserInfo();
-    }, []);
 
     const onFinish = (values: LoginForm) => {
-        API.UserApi.login(values)
+        console.log(values);
+        API.UserApi.register(values)
             .then(res => {
-                navigate('/dashboard');
-                getAndStoreUserInfo();
-                message.success('Login successfully!');
-                // Waiting: index.tsx?t=1689577555971:46 Warning: [antd: message] Static function can not consume context like dynamic theme. Please use 'App' component instead.
+                navigate('./login');
+                message.success('Registered successfully!');
             })
             .catch(err => {
                 console.log('error', err);
@@ -48,24 +27,32 @@ function Login() {
     };
 
     return (
-        <div className="w-full h-full flex-center -my-10">
+        <div className="w-full h-full flex-center py-8">
             <Card
-                title={<div className="text-center">SIGN IN</div>}
+                title={<div className="text-center">SIGN UP</div>}
                 bordered={false}
                 style={{ width: 500 }}
             >
                 <Form
                     name="basic"
-                    labelCol={{ span: 4 }}
-                    wrapperCol={{ span: 20 }}
+                    labelCol={{ span: 8 }}
+                    wrapperCol={{ span: 16 }}
                     style={{ maxWidth: 600 }}
-                    initialValues={{
-                        email: 'example@gamilc.com',
-                        password: 'password'
-                    }}
                     onFinish={onFinish}
                     autoComplete="off"
                 >
+                    <Form.Item
+                        label="Name"
+                        name="nick_name"
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please input a name!'
+                            }
+                        ]}
+                    >
+                        <Input />
+                    </Form.Item>
                     <Form.Item
                         label="Email"
                         name="email"
@@ -78,7 +65,6 @@ function Login() {
                     >
                         <Input />
                     </Form.Item>
-
                     <Form.Item
                         label="Password"
                         name="password"
@@ -92,11 +78,11 @@ function Login() {
                         <Input.Password />
                     </Form.Item>
                     <Space className="flex-center">
-                        <Button onClick={() => navigate('../signup')}>
-                            Sign up
+                        <Button onClick={() => navigate('../login')}>
+                            Sign in
                         </Button>
                         <Button type="primary" htmlType="submit">
-                            Sign in
+                            Sign up
                         </Button>
                     </Space>
                 </Form>
@@ -105,4 +91,4 @@ function Login() {
     );
 }
 
-export default Login;
+export default SignUp;

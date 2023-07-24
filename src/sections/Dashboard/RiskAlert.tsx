@@ -1,6 +1,4 @@
-import { useState } from 'react';
-
-import { Card, Radio, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 import FPCard from '@/components/FPCard';
 import FPRadio from '@/components/FPRadio';
 

@@ -6,6 +6,7 @@ import PageLayout from '@/sections/PageLayout';
 import LandPageLayout from '@/sections/LandPageLayout';
 
 const Login = lazy(() => import('@/pages/Login'));
+const SignUp = lazy(() => import('@/pages/SignUp'));
 const Product = lazy(() => import('@/pages/Product'));
 const Dashboard = lazy(() => import('@/pages/Dashboard'));
 const Monitor = lazy(() => import('@/pages/ObjectMonitor'));
@@ -19,9 +20,18 @@ const ObjectRuleDetail = lazy(() => import('@/pages/Rule/[id]'));
 const NotFound = lazy(() => import('@/pages/Others/404'));
 const Components = lazy(() => import('@/pages/Others/Components'));
 
-// waiting: loading样式放到屏幕正中间，并且思考一下需不需要在数据展示之前加载一下效果
 const lazyLoad = (conponent: ReactNode): ReactNode => {
-    return <Suspense fallback={<Spin />}>{conponent}</Suspense>;
+    return (
+        <Suspense
+            fallback={
+                <div className="flex-center w-full h-full">
+                    <Spin />
+                </div>
+            }
+        >
+            {conponent}
+        </Suspense>
+    );
 };
 
 const routes: RouteObject[] = [
@@ -84,6 +94,10 @@ const routes: RouteObject[] = [
             {
                 path: '/product/login',
                 element: lazyLoad(<Login />)
+            },
+            {
+                path: '/product/signup',
+                element: lazyLoad(<SignUp />)
             }
         ]
     },

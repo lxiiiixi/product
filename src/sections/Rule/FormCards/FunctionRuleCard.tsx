@@ -44,99 +44,93 @@ const FunctionRuleCard = ({
                 })),
         [functionsByAbi]
     );
+    console.log(functionsByAbi);
 
     const dynamicParams = () => {
         const params = getPamarsByName('function', func, abi);
         // type 和 baseType 有什么区别
         return (
             <>
-                {/* waiting: 优化-有没有更好的方式判断参数类型 */}
                 {params &&
+                    params.length > 0 &&
                     params.map((item, index) => {
-                        switch (item.baseType) {
-                            case 'uint256':
-                            case 'uint8':
-                            case 'int8':
-                            case 'int16':
-                            case 'uint16':
-                            case 'int32':
-                            case 'uint32':
-                            case 'int64':
-                            case 'uint64':
-                            case 'int128':
-                            case 'uint128':
-                            case 'int256':
-                                return (
-                                    <div
-                                        className="flex items-center justify-between"
-                                        key={index + 1}
+                        if (item.baseType.includes('int')) {
+                            return (
+                                <div
+                                    className="flex items-center justify-between"
+                                    key={index + 1}
+                                >
+                                    <Form.Item
+                                        label={`Param${index + 1}: ${
+                                            item.name
+                                        }`}
+                                        className="w-1/2"
                                     >
+                                        <Space>
+                                            <span>Min:</span>
+                                            <Form.Item
+                                                noStyle
+                                                name={`rule${ruleIndex}-params${index}-${item.name}-min`}
+                                                rules={[{ required: false }]}
+                                            >
+                                                <InputNumber className="w-full" />
+                                            </Form.Item>
+                                        </Space>
+                                    </Form.Item>
+                                    <Form.Item label=" " className="w-1/2">
+                                        <Space>
+                                            <span>Max:</span>
+                                            <Form.Item
+                                                noStyle
+                                                name={`rule${ruleIndex}-params${index}-${item.name}-max`}
+                                                rules={[{ required: false }]}
+                                            >
+                                                <InputNumber className="w-full" />
+                                            </Form.Item>
+                                        </Space>
+                                    </Form.Item>
+                                </div>
+                            );
+                        } else {
+                            switch (item.baseType) {
+                                case 'bool':
+                                    return (
                                         <Form.Item
+                                            name={`rule${ruleIndex}-params${index}-${item.name}`}
                                             label={`Param${index + 1}: ${
                                                 item.name
                                             }`}
-                                            className="w-1/2"
+                                            rules={[{ required: false }]}
+                                            key={index + 1}
                                         >
-                                            <Space>
-                                                <span>Min:</span>
-                                                <Form.Item
-                                                    noStyle
-                                                    name={`rule${ruleIndex}-params${index}-${item.name}-min`}
-                                                    rules={[
-                                                        { required: false }
-                                                    ]}
-                                                >
-                                                    <InputNumber className="w-full" />
-                                                </Form.Item>
-                                            </Space>
+                                            <Radio.Group>
+                                                <Radio value="true">
+                                                    {' '}
+                                                    true{' '}
+                                                </Radio>
+                                                <Radio value="false">
+                                                    {' '}
+                                                    false{' '}
+                                                </Radio>
+                                            </Radio.Group>
                                         </Form.Item>
-                                        <Form.Item label=" " className="w-1/2">
-                                            <Space>
-                                                <span>Max:</span>
-                                                <Form.Item
-                                                    noStyle
-                                                    name={`rule${ruleIndex}-params${index}-${item.name}-max`}
-                                                    rules={[
-                                                        { required: false }
-                                                    ]}
-                                                >
-                                                    <InputNumber className="w-full" />
-                                                </Form.Item>
-                                            </Space>
+                                    );
+                                default:
+                                    return (
+                                        <Form.Item
+                                            name={`rule${ruleIndex}-params${index}-${item.name}`}
+                                            label={`Param${index + 1}: ${
+                                                item.name
+                                            }`}
+                                            rules={[{ required: false }]}
+                                            key={index + 1}
+                                        >
+                                            <FPInput
+                                                placeholder={`Please enter the parameter for the ${item.baseType} type`}
+                                            />
                                         </Form.Item>
-                                    </div>
-                                );
-                            case 'bool':
-                                return (
-                                    <Form.Item
-                                        name={`rule${ruleIndex}-params${index}-${item.name}`}
-                                        label={`Param${index + 1}: ${
-                                            item.name
-                                        }`}
-                                        rules={[{ required: false }]}
-                                        key={index + 1}
-                                    >
-                                        <Radio.Group>
-                                            <Radio value="true"> true </Radio>
-                                            <Radio value="false"> false </Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                );
-                            default:
-                                return (
-                                    <Form.Item
-                                        name={`rule${ruleIndex}-params${index}-${item.name}`}
-                                        label={`Param${index + 1}: ${
-                                            item.name
-                                        }`}
-                                        rules={[{ required: false }]}
-                                        key={index + 1}
-                                    >
-                                        <FPInput
-                                            placeholder={`Please enter the parameter for the ${item.baseType} type`}
-                                        />
-                                    </Form.Item>
-                                );
+                                    );
+                            }
                         }
                     })}
             </>

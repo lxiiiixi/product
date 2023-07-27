@@ -4,6 +4,7 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import FPCard from '@/components/FPCard';
 import { RiskStatus } from '@/config/commonInterface';
 import { RiskInfo } from '@/config/commonInterface';
+import timestampToDaysAgo from '@/utils/timestampToDaysAgo';
 
 const RiskCard = ({ cardData }: { cardData: RiskInfo }) => {
     const {
@@ -46,7 +47,7 @@ const RiskCard = ({ cardData }: { cardData: RiskInfo }) => {
                         <span className="mx-1">{level}</span>
                     </span>
                     <li className="list-disc list-inside">
-                        {Math.floor(created_at / 86400000000)} days ago
+                        {timestampToDaysAgo(created_at)}
                     </li>
                 </div>
             }

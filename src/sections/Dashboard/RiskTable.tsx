@@ -10,13 +10,17 @@ import type { ColumnsType } from 'antd/es/table';
 import { RiskInfo } from '@/config/commonInterface';
 
 import { getChainById } from '@/utils/chains';
+import timestampToDaysAgo from '@/utils/timestampToDaysAgo';
 
 const tableColumns: ColumnsType<RiskInfo> = [
     {
         title: 'Discovery time',
-        dataIndex: 'created_at', // Waiting: 时间转换为 xxx days ago
+        dataIndex: 'created_at',
         key: 'created_at',
-        width: '10%'
+        width: '10%',
+        render: data => {
+            return timestampToDaysAgo(data);
+        }
     },
     {
         title: 'Risk Labels',
@@ -67,13 +71,17 @@ const tableColumns: ColumnsType<RiskInfo> = [
         dataIndex: 'object_address',
         key: 'object_address',
         width: '28%',
-        render: (text, record) => (
-            <div className="whitespace-normal">
-                {`${record.name} (${getChainById(
-                    record.chain_id as string
-                )}:${text})`}
-            </div>
-        )
+        render: (text, record) => {
+            return (
+                <div className="whitespace-normal">
+                    {text || record.object_name
+                        ? `${record.name} (${getChainById(
+                              record.chain_id as string
+                          )}:${text})`
+                        : record.object_name || text}
+                </div>
+            );
+        }
     },
     {
         title: 'Value of Assets involved',
@@ -94,7 +102,7 @@ const tableColumns: ColumnsType<RiskInfo> = [
         dataIndex: 'strategies',
         key: 'strategies',
         width: '8%',
-        render: (text, record) => {
+        render: text => {
             return text
                 ? text.map((item: string[]) => {
                       <p>{item}</p>;

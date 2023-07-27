@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import FPCard from '@/components/FPCard';
 import { Space, Switch, Table } from 'antd';
@@ -7,6 +7,7 @@ import type { ColumnsType } from 'antd/es/table';
 import { TeamOutlined } from '@ant-design/icons';
 
 import { ObjectInfo } from '@/config/commonInterface';
+import timestampToDaysAgo from '@/utils/timestampToDaysAgo';
 
 const functionColumns: ColumnsType<ObjectInfo> = [
     {
@@ -56,7 +57,10 @@ const functionColumns: ColumnsType<ObjectInfo> = [
     {
         title: 'Activated',
         dataIndex: 'created_at',
-        key: 'created_at' // Waiting: 时间格式转换
+        key: 'created_at', // 对象从创建到现在的时间天数
+        render: (text, record) => {
+            return <p>{timestampToDaysAgo(text).replace(' ago', '')}</p>;
+        }
     }
 ];
 
@@ -69,6 +73,11 @@ function ObjectTable({ objectList }: { objectList: ObjectInfo[] }) {
         }
         return list;
     };
+
+    const columnsData = useMemo(
+        () => filterObject(objectList, switchOn),
+        [objectList, switchOn]
+    );
 
     return (
         <FPCard
@@ -99,7 +108,7 @@ function ObjectTable({ objectList }: { objectList: ObjectInfo[] }) {
         >
             <Table
                 columns={functionColumns}
-                dataSource={filterObject(objectList, switchOn)}
+                dataSource={columnsData}
                 scroll={{ x: 1000 }}
                 rowKey={record => record._id.$oid}
             />

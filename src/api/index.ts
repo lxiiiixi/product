@@ -10,6 +10,6 @@ const API = {
     StyApi,
     RiskApi,
     AbiApi
-};
+} as const;
 
 export default API;

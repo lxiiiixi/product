@@ -1,5 +1,5 @@
 import LayoutFooter from './LayoutSections/LayoutFooter';
-import HeaderBar from './LandpageSetions/HeaderBar';
+import HeaderBar from './LandpageSections/HeaderBar';
 import { Outlet } from 'react-router-dom';
 
 function LandPageLayout() {

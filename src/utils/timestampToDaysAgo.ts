@@ -15,4 +15,6 @@ function timestampToDaysAgo(timestamp: number) {
     }
 }
 
+// waiting: 需要优化的地方 细分到小于一天就按照小时/分钟来处理
+
 export default timestampToDaysAgo;

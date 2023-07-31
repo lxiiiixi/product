@@ -209,8 +209,8 @@ function Dashboard() {
     };
 
     const { riskLevel, assetsValue } = useMemo(
-        () => getRiskAlertData(demodata),
-        [demodata]
+        () => getRiskAlertData(riskList),
+        [riskList]
     );
 
     return (

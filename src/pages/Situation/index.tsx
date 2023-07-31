@@ -8,7 +8,11 @@ import BasicInfo from '@/sections/LandpageSections/BasicInfo';
 import useGlobalDataStore from '@/store/globalDaraStore';
 import { ObjectInfo, ObjectType } from '@/config/commonInterface';
 
-import LiquidityDistributionCard from '@/sections/Situation/Charts/Contract/LiquidityDistributionCard';
+import LiquidityDistributionTable from '@/sections/Situation/ChartTables/Contract/LiquidityDistributionTable';
+import TokenSwapTable from '@/sections/Situation/ChartTables/Token/TokenSwapTable';
+import PriceSituationTable from '@/sections/Situation/ChartTables/Token/PriceSituationTable';
+import DexLiquidityTable from '@/sections/Situation/ChartTables/DexLiquidityTable';
+import TokenTransferTable from '@/sections/Situation/ChartTables/Token/TokenTransferTable';
 
 function Situation() {
     const objectLists = useGlobalDataStore(state => state.objectLists);
@@ -47,17 +51,21 @@ function Situation() {
                     />
                     <BasicInfo data={basicInfo} />
                     {focusedObject.category === ObjectType.Token && (
-                        <div>Token chart</div>
+                        <div>
+                            <TokenTransferTable />
+                            <PriceSituationTable />
+                            <TokenSwapTable />
+                        </div>
                     )}
                     {focusedObject.category === ObjectType.Contract && (
                         <div>
-                            Contract chart
-                            <LiquidityDistributionCard />
+                            <LiquidityDistributionTable />
                         </div>
                     )}
                     {focusedObject.category === ObjectType.EOA && (
                         <div>EOA chart</div>
                     )}
+                    <DexLiquidityTable />
                 </Col>
                 <Col
                     xs={24}

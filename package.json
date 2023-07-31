@@ -12,6 +12,7 @@
   "dependencies": {
     "@fontsource-variable/oswald": "^5.0.5",
     "@rainbow-me/rainbowkit": "^1.0.5",
+    "@rollup/plugin-typescript": "^11.1.2",
     "antd": "^5.6.4",
     "axios": "^1.4.0",
     "echarts": "^5.4.1",

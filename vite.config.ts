@@ -21,7 +21,17 @@ export default defineConfig(({ command, mode }) => {
       assetsInlineLimit: 4096, // 资源内联阈值
       cssCodeSplit: true, // 开启css拆分
       sourcemap: false, // 开启sourcemap
-      minify: 'esbuild' // 压缩工具, terser压缩率更高1%-2%,esbuild压缩更快20-40 倍
+      minify: 'esbuild', // 压缩工具, terser压缩率更高1%-2%,esbuild压缩更快20-40 倍
+       // 禁用类型检查
+    rollupOptions: {
+      plugins: [
+        require('@rollup/plugin-typescript')({
+          // 使用 TypeScript，但禁用类型检查
+          typescript: require('typescript'),
+          check: false,
+        }),
+      ],
+    },
     },
     esbuild: {
       /* 打包生产环境移除 console、debugger: https://www.cnblogs.com/guangzan/p/16633753.html */
